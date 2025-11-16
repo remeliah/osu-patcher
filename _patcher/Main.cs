@@ -13,7 +13,7 @@ namespace _patcher
         {
             try
             {
-#if Debug
+#if DEBUG
                 // server checks so they don't get banned on bancho
                 // NOTE: on debug since this already being handled on https://github.com/refx-online/patcher-cli
                 var args = Environment.GetCommandLineArgs();

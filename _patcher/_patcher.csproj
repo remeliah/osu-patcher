@@ -50,13 +50,13 @@
     <Compile Include="Config.cs" />
     <Compile Include="Options\Category.cs" />
     <Compile Include="Options\CheckBox.cs" />
-    <Compile Include="Options\OsuString.cs" />
     <Compile Include="Options\Element.cs" />
     <Compile Include="Options\FontAwesome.cs" />
     <Compile Include="Options\Options.cs" />
     <Compile Include="Options\Section.cs" />
     <Compile Include="Options\TextBox.cs" />
     <Compile Include="Patch\GameBase.cs" />
+    <Compile Include="Patch\LocalisationManager.cs" />
     <Compile Include="Utils\BaseConfig.cs" />
     <Compile Include="Utils\Logger.cs" />
     <Compile Include="Main.cs" />

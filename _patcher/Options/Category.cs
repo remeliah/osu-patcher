@@ -6,6 +6,9 @@ namespace _patcher.Options
 {
     internal class Category : Element
     {
+        // last OsuString
+        private const int TryLazer = 0x507;
+        
         private static readonly ConstructorInfo BaseCategoryConstructor = ILPatch.FindConstructorBySignature(new[]
         {
             OpCodes.Ldarg_0,
@@ -20,12 +23,12 @@ namespace _patcher.Options
             OpCodes.Call
         });
 
-        public Category(FontAwesome icon, OsuString title)
-            : base(CreateCategoryInstance(icon, title))
+        public Category(FontAwesome icon)
+            : base(CreateCategoryInstance(icon))
         {
         }
 
-        private static object CreateCategoryInstance(FontAwesome icon, OsuString title)
-            => BaseCategoryConstructor.Invoke(new object[] { title, icon });
+        private static object CreateCategoryInstance(FontAwesome icon)
+            => BaseCategoryConstructor.Invoke(new object[] { TryLazer + 1, icon });
     }
 }

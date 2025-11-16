@@ -33,7 +33,7 @@ namespace _patcher.Options
             
             Array sectionChildren = Element.CreateArray(section);
             
-            Category category = new Category(FontAwesome.moon_o, OsuString.TabGameplay);
+            Category category = new Category(FontAwesome.Moon);
             category.SetChildren(sectionChildren);
 
             // add to elements
