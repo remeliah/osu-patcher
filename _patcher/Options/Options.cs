@@ -1,49 +1,38 @@
 ﻿using System;
 using System.Reflection;
-using _patcher.utils;
 using System.Reflection.Emit;
 using HarmonyLib;
+using JetBrains.Annotations;
+using _patcher.Utils;
 using _patcher.Helpers;
 
 namespace _patcher.Options
 {
+    [UsedImplicitly]
     internal class Options
     {
-        public static Config config = Config._load();
+        public static readonly Config Config = Config._load();
         public static void InitializeOptions(object instance)
         {
             CheckBox alwaysShowMisses = new CheckBox("Patch Relax/Autopilot",
                 "Removes relax/autopilot limitation, Allows you to see miss, Combo break sound and ranking panel.",
-                config.PatchRelax,
-                new EventHandler(config.TogglePatchRelax));
-            /*TextBox transitionTime = new TextBox("Transition Time",
-                config.TransitionTime.ToString());*/
+                Config.PatchRelax,
+                Config.TogglePatchRelax);
+
             CheckBox transitionTime = new CheckBox("Faster Transition time",
                 "Control how fast the screen fades in and out. Turn this on for quicker transitions.",
-                config.TransitionTime,
-                new EventHandler(config.ToggleTransitionTime));
-
-            /*
-            CheckBox csChanger = new CheckBox("0.0 Circle Size",
-                "Makes Circle Size on maps to 0 (Disables score submission!)",
-                config.csChange,
-                new EventHandler(config.ToggleCsChange));
-
-            CheckBox disableScoreSub = new CheckBox("Disable Score Submission",
-                "Prevents score submitting when activated.",
-                config.DisableScoreSubmission,
-                new EventHandler(config.ToggleDisableScoreSub));
-            */
-            Array optionsChildren = Element.createArray(
+                Config.TransitionTime,
+                Config.ToggleTransitionTime);
+            
+            Array optionsChildren = Element.CreateArray(
                 alwaysShowMisses,
-                transitionTime
-                /*transitionTime*/);
-                //csChanger,
-                //disableScoreSub);
+                transitionTime);
 
             Section section = new Section("Patches");
             section.SetChildren(optionsChildren);
-            Array sectionChildren = Element.createArray(section);
+            
+            Array sectionChildren = Element.CreateArray(section);
+            
             Category category = new Category(FontAwesome.moon_o, OsuString.TabGameplay);
             category.SetChildren(sectionChildren);
 
@@ -51,13 +40,14 @@ namespace _patcher.Options
             Add(instance, category);
         }
 
-        public static void ReloadElements(object instance, bool jumptoTop = true)
-            => BaseReloadElements.Invoke(instance, new object[] { jumptoTop });
+        // private static void ReloadElements(object instance, bool jumpToTop = true)
+        //    => BaseReloadElements.Invoke(instance, new object[] { jumpToTop });
 
-        public static void Add(object instance, Element element)
-            => BaseAddElement.Invoke(instance, new object[] { element._v });
+        private static void Add(object instance, Element element)
+            => BaseAddElement.Invoke(instance, new[] { element.V });
 
         #region optsign
+        /*
         private static readonly MethodBase BaseReloadElements = ILPatch.FindMethodBySignature(new[]
         {
             OpCodes.Ldarg_0,
@@ -91,7 +81,8 @@ namespace _patcher.Options
             OpCodes.Ldarg_0,
             OpCodes.Call,
             OpCodes.Ret
-        });
+        }); 
+        */
 
         private static readonly MethodBase BaseAddElement = ILPatch.FindMethodBySignature(new[]
         {
@@ -158,6 +149,7 @@ namespace _patcher.Options
     }
 
     [HarmonyPatch]
+    [UsedImplicitly]
     internal class PatchOptionsMenu
     {
         private static readonly OpCode[] Signature = new OpCode[]
@@ -175,9 +167,13 @@ namespace _patcher.Options
         };
 
         [HarmonyTargetMethod]
+        [UsedImplicitly]
         private static MethodBase Target() => ILPatch.FindMethodBySignature(Signature);
 
         [HarmonyPostfix]
+        [UsedImplicitly]
+        // @formatter:off
+        // ReSharper disable InconsistentNaming
         private static void Postfix(object __instance)
         {
             try
@@ -194,5 +190,7 @@ namespace _patcher.Options
                 Logger.log(ex.ToString());
             }
         }
+        // ReSharper restore InconsistentNaming
+        // @formatter:on
     }
 }

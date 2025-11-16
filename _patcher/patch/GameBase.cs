@@ -5,7 +5,6 @@ using System.Reflection.Emit;
 using System.Reflection;
 using _patcher.Helpers;
 using HarmonyLib;
-using _patcher.Options;
 using System.Runtime.CompilerServices;
 
 namespace _patcher.Patch
@@ -77,7 +76,7 @@ namespace _patcher.Patch
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static float TransitionTime()
         {
-            if (!Options.Options.config.TransitionTime) 
+            if (!Options.Options.Config.TransitionTime) 
                 return 100;
 
             return 200;

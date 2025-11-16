@@ -10,11 +10,11 @@ namespace _patcher.Helpers
         private readonly byte[] _ilInstructions;
         private int _pos;
 
-        private static readonly Dictionary<(byte prefix, byte code), OpCode> _opcodes;
+        private static readonly Dictionary<(byte prefix, byte code), OpCode> Opcodes;
 
         static ILReader()
         {
-            _opcodes = new Dictionary<(byte prefix, byte code), OpCode>();
+            Opcodes = new Dictionary<(byte prefix, byte code), OpCode>();
 
             foreach (var field in typeof(OpCodes).GetFields(BindingFlags.Public | BindingFlags.Static))
             {
@@ -23,7 +23,7 @@ namespace _patcher.Helpers
 
                 var prefix = (byte)(opcode.Size == 1 ? 0 : 0xFE);
                 var code = (byte)(opcode.Value & 0xFF);
-                _opcodes[(prefix, code)] = opcode;
+                Opcodes[(prefix, code)] = opcode;
             }
         }
 
@@ -37,7 +37,7 @@ namespace _patcher.Helpers
                 var prefix = (byte)(currentByte == 0xFE ? 0xFE : 0);
                 var code = prefix == 0xFE ? _ilInstructions[_pos++] : currentByte;
 
-                var op = _opcodes[(prefix, code)];
+                var op = Opcodes[(prefix, code)];
 
                 switch (op.OperandType)
                 {

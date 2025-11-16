@@ -1,17 +1,19 @@
-﻿using HarmonyLib;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using System.Reflection.Emit;
 using System.Reflection;
-using _patcher.Helpers;
 using System.Runtime.CompilerServices;
+using HarmonyLib;
+using _patcher.Helpers;
+using JetBrains.Annotations;
 
 namespace _patcher.Patch
 {
     /// <summary>
-    /// patch relax's ranking score screen
+    /// patch relax ranking score screen
     /// </summary>
     [HarmonyPatch]
+    [UsedImplicitly]
     internal class PatchAutoSaveRelaxScores
     {
         // osu.GameModes.Ranking.Ranking::loadLocalUserScore
@@ -57,9 +59,11 @@ namespace _patcher.Patch
         };
 
         [HarmonyTargetMethod]
+        [UsedImplicitly]
         private static MethodBase Target() => ILPatch.FindMethodBySignature(Signature);
 
         [HarmonyTranspiler]
+        [UsedImplicitly]
         private static IEnumerable<CodeInstruction> Transpiler(IEnumerable<CodeInstruction> instructions)
         {
             var codes = new List<CodeInstruction>(instructions);
@@ -82,6 +86,6 @@ namespace _patcher.Patch
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static bool PatchRelax() => !Options.Options.config.PatchRelax;
+        public static bool PatchRelax() => !Options.Options.Config.PatchRelax;
     }
 }

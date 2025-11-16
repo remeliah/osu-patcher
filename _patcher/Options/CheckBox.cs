@@ -2,11 +2,12 @@
 using System.Reflection;
 using System.Reflection.Emit;
 using _patcher.Helpers;
+
 namespace _patcher.Options
 {
     internal class CheckBox : Element
     {
-        private static ConstructorInfo boolCons;
+        private static ConstructorInfo _boolCons;
 
         private static readonly ConstructorInfo BaseCheckBox = ILPatch.FindConstructorBySignature(new[]
         {
@@ -28,9 +29,9 @@ namespace _patcher.Options
 
         private static object CreateCheckBoxInstance(string title, string tooltip, bool initial, EventHandler onChanged)
         {
-            if (boolCons == null)
+            if (_boolCons == null)
             {
-                boolCons = BaseCheckBox
+                _boolCons = BaseCheckBox
                     .GetParameters()[2]
                     .ParameterType
                     .GetConstructor(new[] 
@@ -39,7 +40,7 @@ namespace _patcher.Options
                     });
             }
 
-            object bindableBool = boolCons.Invoke(new object[] { initial });
+            object bindableBool = _boolCons.Invoke(new object[] { initial });
 
             return BaseCheckBox.Invoke(new object[]
             {

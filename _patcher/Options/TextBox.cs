@@ -1,5 +1,4 @@
-﻿using System;
-using System.Reflection;
+﻿using System.Reflection;
 using System.Reflection.Emit;
 using _patcher.Helpers;
 
@@ -7,7 +6,7 @@ namespace _patcher.Options
 {
     internal class TextBox : Element
     {
-        private static ConstructorInfo bindableCons;
+        private static ConstructorInfo _bindableCons;
 
         private static readonly ConstructorInfo BaseTextBox = ILPatch.FindConstructorBySignature(new[]
         {
@@ -31,9 +30,9 @@ namespace _patcher.Options
 
         private static object CreateTextBoxInstance(string title, string initial, bool passwordBox = false)
         {
-            if (bindableCons == null)
+            if (_bindableCons == null)
             {
-                bindableCons = BaseTextBox
+                _bindableCons = BaseTextBox
                     .GetParameters()[1]
                     .ParameterType
                     .GetConstructor(new[]
@@ -41,8 +40,8 @@ namespace _patcher.Options
                         typeof(string)
                     });
             }
-
-            object str = bindableCons.Invoke(new object[] { initial });
+            
+            object str = _bindableCons.Invoke(new object[] { initial });
 
             return BaseTextBox.Invoke(new object[]
             {

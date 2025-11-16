@@ -1,4 +1,4 @@
-﻿using _patcher.utils;
+﻿using _patcher.Utils;
 using System;
 using System.IO;
 
@@ -6,29 +6,15 @@ namespace _patcher
 {
     internal class Config : BaseConfig
     {
-        internal static string ConfigFileName = "config.ini";
+        private const string ConfigFileName = "config.ini";
         private static readonly string ConfigPath = Path.Combine(
             Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), "osuPatcher");
 
         public delegate void ConfigChangedHandler();
-        public event ConfigChangedHandler onConfigChanged;
+        public event ConfigChangedHandler OnConfigChanged;
 
-        #region config
-        // ...
-        private bool _patchRelax = true;
-        public bool PatchRelax 
-        { 
-            get => _patchRelax; 
-            set => _patchRelax = value; 
-        }
-
-        private bool _transitionTime = true;
-        public bool TransitionTime
-        {
-            get => _transitionTime;
-            set => _transitionTime = value;
-        }
-        #endregion
+        public bool PatchRelax { get; set; } = true;
+        public bool TransitionTime { get; set; } = true;
 
         internal static Config _load()
         {
@@ -52,14 +38,23 @@ namespace _patcher
                 _saveConfig(writer);
         }
 
-        public void ToggleSetting(ref bool conf)
+        private void ToggleSetting(string propName)
         {
-            conf = !conf;
+            // HACK: FLIP the value of the auto property directly
+            var prop = GetType()
+                .GetProperty(propName);
+            
+            if (prop == null) return;
+
+            var curr = (bool)prop.GetValue(this);
+            prop.SetValue(this, !curr);
+
             _save();
-            onConfigChanged?.Invoke();   
+            
+            OnConfigChanged?.Invoke();
         }
 
-        public void TogglePatchRelax(object sender, EventArgs e) => ToggleSetting(ref _patchRelax);
-        public void ToggleTransitionTime(object sender, EventArgs e) => ToggleSetting(ref _transitionTime);
+        public void TogglePatchRelax(object sender, EventArgs e) => ToggleSetting(nameof(PatchRelax));
+        public void ToggleTransitionTime(object sender, EventArgs e) => ToggleSetting(nameof(TransitionTime));
     }
 }

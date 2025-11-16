@@ -1,6 +1,6 @@
-﻿using _patcher.Helpers;
-using System.Reflection;
+﻿using System.Reflection;
 using System.Reflection.Emit;
+using _patcher.Helpers;
 
 namespace _patcher.Options
 {

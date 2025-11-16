@@ -3,7 +3,7 @@ using System.IO;
 using System.Linq;
 using System.Reflection;
 
-namespace _patcher.utils
+namespace _patcher.Utils
 {
     internal abstract class BaseConfig
     {
@@ -51,7 +51,7 @@ namespace _patcher.utils
             }
         }
 
-        protected PropertyInfo[] GetFields() =>
+        private PropertyInfo[] GetFields() =>
             GetType().GetProperties(BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic);
     }
 }

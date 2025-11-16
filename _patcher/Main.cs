@@ -1,23 +1,22 @@
 ﻿using System;
-using System.Linq;
 using _patcher.Patch;
-using _patcher.utils;
+using _patcher.Utils;
 using HarmonyLib;
 
 namespace _patcher
 {
     public class Main
     {
-        private static Harmony _harmony = new Harmony("osu_patcher.ano");
-
-        // entry point
+        private static readonly Harmony Harmony = new Harmony("osu_patcher.ano");
+        
         public static int Initialize(string st)
         {
             try
             {
-                // server checks so they dont get banned on bancho
-                var args = Environment.GetCommandLineArgs();
 #if Debug
+                // server checks so they don't get banned on bancho
+                // NOTE: on debug since this already being handled on https://github.com/refx-online/patcher-cli
+                var args = Environment.GetCommandLineArgs();
                 if (!args.Contains("-devserver") || string.IsNullOrEmpty(args.SkipWhile(arg => arg != "-devserver")
                     .Skip(1)
                     .FirstOrDefault()) ||
@@ -33,7 +32,7 @@ namespace _patcher
 #endif
 
                 // now patchall
-                _harmony.PatchAll(typeof(Main).Assembly);
+                Harmony.PatchAll(typeof(Main).Assembly);
 
                 NotificationManager.ShowMessageMassive("osu! patched!",
                     5000,

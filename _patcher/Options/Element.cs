@@ -8,8 +8,8 @@ namespace _patcher.Options
 {
     internal class Element
     {
-        public object _v { get; set; }
-        public Element(object v) => _v = v;
+        internal object V { get; set; }
+        protected Element(object v) => V = v;
 
         private static readonly MethodBase BaseSetChildren = ILPatch.FindMethodBySignature(new[]
         {
@@ -48,21 +48,21 @@ namespace _patcher.Options
 
         });
 
-        public static Array createArray(params Element[] elements)
+        public static Array CreateArray(params Element[] elements)
         {
             Array array = Array.CreateInstance(elements
                 .First()
-                ._v.GetType()
-                .BaseType, 
+                .V.GetType()
+                .BaseType,
                 elements.Length);
 
             for (int i = 0; i < elements.Length; i++)
-                array.SetValue(elements[i]._v, i);
+                array.SetValue(elements[i].V, i);
             
             return array;
         }
 
         public void SetChildren(Array children) 
-            => BaseSetChildren.Invoke(_v, new object[] { children });
+            => BaseSetChildren.Invoke(V, new object[] { children });
     }
 }

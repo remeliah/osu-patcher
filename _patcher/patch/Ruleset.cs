@@ -4,6 +4,7 @@ using System.Reflection;
 using System.Reflection.Emit;
 using System.Runtime.CompilerServices;
 using HarmonyLib;
+using JetBrains.Annotations;
 using _patcher.Helpers;
 
 namespace _patcher.Patch
@@ -12,6 +13,7 @@ namespace _patcher.Patch
     /// patch relax combo break
     /// </summary>
     [HarmonyPatch]
+    [UsedImplicitly]
     internal class PatchRelaxComboBreak
     {
         // osu.GameModes.Play.Rulesets.Ruleset::IncreaseScoreHit
@@ -53,6 +55,6 @@ namespace _patcher.Patch
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static bool PatchRelax() => !Options.Options.config.PatchRelax;
+        public static bool PatchRelax() => !Options.Options.Config.PatchRelax;
     }
 }

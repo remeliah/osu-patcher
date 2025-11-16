@@ -1,9 +1,10 @@
-﻿using HarmonyLib;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Reflection.Emit;
 using System.Reflection;
 using System.Linq;
 using System.Runtime.CompilerServices;
+using HarmonyLib;
+using JetBrains.Annotations;
 using _patcher.Helpers;
 
 namespace _patcher.Patch
@@ -73,6 +74,7 @@ namespace _patcher.Patch
     /// patch relax miss
     /// </summary>
     [HarmonyPatch]
+    [UsedImplicitly]
     internal class PatchRelaxMiss
     {
         // osu.GameplayElements.HitObjectManager::Hit
@@ -97,9 +99,11 @@ namespace _patcher.Patch
         };
 
         [HarmonyTargetMethod]
+        [UsedImplicitly]
         private static MethodBase Target() => ILPatch.FindMethodBySignature(Signature);
 
         [HarmonyTranspiler]
+        [UsedImplicitly]
         private static IEnumerable<CodeInstruction> Transpiler(IEnumerable<CodeInstruction> instructions)
         {
             var codes = new List<CodeInstruction>(instructions);
@@ -117,6 +121,6 @@ namespace _patcher.Patch
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static bool PatchRelax() => !Options.Options.config.PatchRelax;
+        public static bool PatchRelax() => !Options.Options.Config.PatchRelax;
     }
 }

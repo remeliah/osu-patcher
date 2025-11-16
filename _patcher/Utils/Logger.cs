@@ -2,7 +2,7 @@
 using HarmonyLib;
 using System.Reflection;
 
-namespace _patcher.utils
+namespace _patcher.Utils
 {
     internal class Logger
     {
