@@ -1,55 +1,48 @@
-﻿using System.Reflection.Emit;
+using System.Reflection.Emit;
 using System.Reflection;
 using JetBrains.Annotations;
 using _patcher.Helpers;
+using _patcher.Constants;
 
 namespace _patcher.Patch
 {
+    /// <summary>
+    /// Manages in-game notifications.
+    /// </summary>
     [UsedImplicitly]
     internal class NotificationManager
     {
-        // osu.Graphics.Notifications.NotificationManager::ShowMessage
-        private static readonly MethodBase BaseShowMessage = ILPatch.FindMethodBySignature(new[]
-        {
-            OpCodes.Ldarg_1,
-            OpCodes.Stfld,
-            OpCodes.Ldloc_0,
-            OpCodes.Ldarg_3,
-            OpCodes.Stfld,
-            OpCodes.Ldsfld,
-            OpCodes.Ldloc_0,
-            OpCodes.Ldftn,
-            OpCodes.Newobj
-        });
+        private static readonly MethodBase BaseShowMessage = ILPatch.FindMethodBySignature(Patterns.NotificationManager_ShowMessage);
 
-        // osu.Graphics.Notifications.NotificationManager::ShowMessageMassive
-        private static readonly MethodBase BaseShowMessageMassive = ILPatch.FindMethodBySignature(new[]
-        {
-            OpCodes.Ldarg_1,
-            OpCodes.Stfld,
-            OpCodes.Ldloc_0,
-            OpCodes.Ldarg_2,
-            OpCodes.Stfld,
-            OpCodes.Ldloc_0,
-            OpCodes.Ldfld,
-            OpCodes.Brtrue_S,
-            OpCodes.Ret,
-        });
+        private static readonly MethodBase BaseShowMessageMassive = ILPatch.FindMethodBySignature(Patterns.NotificationManager_ShowMessageMassive);
 
+        /// <summary>
+        /// Shows a standard notification message.
+        /// </summary>
+        /// <param name="message">The message to display.</param>
+        /// <param name="color">The color of the notification.</param>
+        /// <param name="time">Duration in milliseconds.</param>
         public static void ShowMessage(
             string message,
             object color,
             int time = 5000) 
          => BaseShowMessage.Invoke(null, new object[] { message, color, time, null });
         
+        /// <summary>
+        /// Shows a massive notification message.
+        /// </summary>
+        /// <param name="message">The message to display.</param>
+        /// <param name="time">Duration in milliseconds.</param>
+        /// <param name="notificationType">Type of the notification.</param>
         public static void ShowMessageMassive(
             string message,
             int time = 5000,
             NotificationType notificationType = NotificationType.Info)
         => BaseShowMessageMassive.Invoke(null, new object[] { message, time, notificationType });
         
-        // TODO: remove? only used this once..
-        // see later if i use ShowMessageMassive again
+        /// <summary>
+        /// Defines the type of notification.
+        /// </summary>
         public enum NotificationType
         {
             Info,

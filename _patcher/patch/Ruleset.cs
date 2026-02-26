@@ -1,4 +1,4 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using System.Reflection.Emit;
@@ -6,36 +6,19 @@ using System.Runtime.CompilerServices;
 using HarmonyLib;
 using JetBrains.Annotations;
 using _patcher.Helpers;
+using _patcher.Constants;
 
 namespace _patcher.Patch
 {
     /// <summary>
-    /// patch relax combo break
+    /// Patch to prevent combo breaks when Relax mod is active.
     /// </summary>
     [HarmonyPatch]
     [UsedImplicitly]
     internal class PatchRelaxComboBreak
     {
-        // osu.GameModes.Play.Rulesets.Ruleset::IncreaseScoreHit
-        /* 
-           if (this.#=z$kEf6vEzCgIu.#=zpQm6Nqd6BI0u() > 20 && !#=zS_AS2zptucP0wp1z7HOrPzQb$3ab.#=z98ZION9Ll4et$efEiA== && 
-           !#=zS_AS2zptucP0wp1z7HOrPzQb$3ab.#=zcxdiu2iP13Mis9wLlw==)
-         */
-        private static readonly OpCode[] Signature = new[]
-        {
-            OpCodes.Ldarg_0,
-            OpCodes.Ldfld,
-            OpCodes.Callvirt,
-            OpCodes.Ldc_I4_S,
-            OpCodes.Ble_S,
-            OpCodes.Ldsfld,
-            OpCodes.Brtrue_S,
-            OpCodes.Ldsfld,
-            OpCodes.Brtrue_S
-        };
-
         [HarmonyTargetMethod]
-        private static MethodBase Target() => ILPatch.FindMethodBySignature(Signature);
+        private static MethodBase Target() => ILPatch.FindMethodBySignature(Patterns.PatchRelaxComboBreak_Target);
 
         [HarmonyTranspiler]
         private static IEnumerable<CodeInstruction> Transpiler(IEnumerable<CodeInstruction> instructions)
@@ -54,6 +37,9 @@ namespace _patcher.Patch
             return codes.AsEnumerable();
         }
 
+        /// <summary>
+        /// Checks if Relax patch is enabled.
+        /// </summary>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static bool PatchRelax() => !Options.Options.Config.PatchRelax;
     }

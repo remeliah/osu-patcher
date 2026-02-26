@@ -1,4 +1,3 @@
-﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection.Emit;
@@ -6,60 +5,34 @@ using System.Reflection;
 using _patcher.Helpers;
 using HarmonyLib;
 using System.Runtime.CompilerServices;
+using _patcher.Constants;
 
 namespace _patcher.Patch
 {
+    /// <summary>
+    /// Provides base game functionality patches and utilities.
+    /// </summary>
     internal class GameBase
     {
-        // osu.GameBase:BeginExit
-        // #=zTp6JhLFlT$nSTXDxMw==:#=zzb6bonY=
-        private static readonly MethodBase BaseBeginExit = ILPatch.FindMethodBySignature(new[]
-        {
-            OpCodes.Ldsfld,
-            OpCodes.Ldfld,
-            OpCodes.Ldsfld,
-            OpCodes.Dup,
-            OpCodes.Brtrue_S,
-            OpCodes.Pop,
-            OpCodes.Ldsfld,
-            OpCodes.Ldftn,
-            OpCodes.Newobj,
-            OpCodes.Dup,
-            OpCodes.Stsfld,
-            OpCodes.Callvirt,
-            OpCodes.Callvirt,
-            OpCodes.Ldc_I4_0
-        });
+        private static readonly MethodBase BaseBeginExit = ILPatch.FindMethodBySignature(Patterns.GameBase_BeginExit);
         
+        /// <summary>
+        /// Initiates the game exit sequence.
+        /// </summary>
+        /// <param name="forceConfirm">If set to <c>true</c>, forces confirmation dialog.</param>
         public static void BeginExit(
             bool forceConfirm = false)
          => BaseBeginExit.Invoke(null, new object[] { forceConfirm });
     }
 
+    /// <summary>
+    /// Patches the game transition time to speed up screen transitions.
+    /// </summary>
     [HarmonyPatch]
     internal class PatchTransition
     {
-        /// <summary>
-        /// Updates the transition time for the game
-        /// 100 -> 200
-        /// </summary>
-        private static readonly OpCode[] Signature = new[]
-        {
-            OpCodes.Ldsfld,
-            OpCodes.Ldc_I4_2,
-            OpCodes.Bne_Un_S,
-            OpCodes.Ldsfld,
-            OpCodes.Ldc_R8,
-            OpCodes.Ble_Un,
-            OpCodes.Ldsfld,
-            OpCodes.Call,
-            OpCodes.Brfalse_S,
-            OpCodes.Ldsfld,
-            OpCodes.Callvirt
-        };
-
         [HarmonyTargetMethod]
-        private static MethodBase Target() => ILPatch.FindMethodBySignature(Signature);
+        private static MethodBase Target() => ILPatch.FindMethodBySignature(Patterns.PatchTransition_Target);
 
         [HarmonyTranspiler]
         private static IEnumerable<CodeInstruction> Transpiler(IEnumerable<CodeInstruction> instructions)
@@ -73,6 +46,10 @@ namespace _patcher.Patch
             return codes.AsEnumerable();
         }
 
+        /// <summary>
+        /// Returns the transition time based on configuration.
+        /// </summary>
+        /// <returns>200 if faster transition is enabled, otherwise 100.</returns>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static float TransitionTime()
         {

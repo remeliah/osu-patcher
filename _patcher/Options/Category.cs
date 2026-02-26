@@ -1,27 +1,16 @@
-﻿using System.Reflection;
+using System.Reflection;
 using System.Reflection.Emit;
 using _patcher.Helpers;
+using _patcher.Constants;
 
 namespace _patcher.Options
 {
+    /// <summary>
+    /// Represents a category in the options menu.
+    /// </summary>
     internal class Category : Element
     {
-        // last OsuString
-        private const int TryLazer = 0x507;
-        
-        private static readonly ConstructorInfo BaseCategoryConstructor = ILPatch.FindConstructorBySignature(new[]
-        {
-            OpCodes.Ldarg_0,
-            OpCodes.Ldarga_S,
-            OpCodes.Constrained,
-            OpCodes.Callvirt,
-            OpCodes.Call,
-            OpCodes.Ldarg_0,
-            OpCodes.Ldarga_S,
-            OpCodes.Constrained,
-            OpCodes.Callvirt,
-            OpCodes.Call
-        });
+        private static readonly ConstructorInfo BaseCategoryConstructor = ILPatch.FindConstructorBySignature(Patterns.Category_Constructor);
 
         public Category(FontAwesome icon)
             : base(CreateCategoryInstance(icon))
@@ -29,6 +18,6 @@ namespace _patcher.Options
         }
 
         private static object CreateCategoryInstance(FontAwesome icon)
-            => BaseCategoryConstructor.Invoke(new object[] { TryLazer + 1, icon });
+            => BaseCategoryConstructor.Invoke(new object[] { OsuConstants.TryLazer + 1, icon });
     }
 }

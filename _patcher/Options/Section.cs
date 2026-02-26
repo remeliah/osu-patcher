@@ -1,23 +1,16 @@
-﻿using System.Reflection;
+using System.Reflection;
 using System.Reflection.Emit;
 using _patcher.Helpers;
+using _patcher.Constants;
 
 namespace _patcher.Options
 {
+    /// <summary>
+    /// Represents a section within a category in the options menu.
+    /// </summary>
     internal class Section : Element
     {
-        private static readonly ConstructorInfo BaseSection = ILPatch.FindConstructorBySignature(new[]
-        {
-            OpCodes.Ldarg_0,
-            OpCodes.Ldarg_1,
-            OpCodes.Callvirt,
-            OpCodes.Ldc_R4,
-            OpCodes.Ldc_R4,
-            OpCodes.Ldc_R4,
-            OpCodes.Newobj,
-            OpCodes.Ldc_R4,
-            OpCodes.Ldc_I4_1,
-        });
+        private static readonly ConstructorInfo BaseSection = ILPatch.FindConstructorBySignature(Patterns.Section_Constructor);
 
         public Section(string title) 
             : base(CreateSectionInstance(title))

@@ -1,4 +1,4 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 using System.Linq;
 using System.Reflection.Emit;
 using System.Reflection;
@@ -6,61 +6,20 @@ using System.Runtime.CompilerServices;
 using HarmonyLib;
 using _patcher.Helpers;
 using JetBrains.Annotations;
+using _patcher.Constants;
 
 namespace _patcher.Patch
 {
     /// <summary>
-    /// patch relax ranking score screen
+    /// Patch to allow saving scores even when Relax mod is active.
     /// </summary>
     [HarmonyPatch]
     [UsedImplicitly]
     internal class PatchAutoSaveRelaxScores
     {
-        // osu.GameModes.Ranking.Ranking::loadLocalUserScore
-        /* 	
-            Mods mods = #=zS_AS2zptucP0wp1z7HOrPzQb$3ab.#=zT1XDrLO5K8XN.#=zYI457PYyRc56;
-			Mods mods2 = Mods.Relax;
-			Mods mods3 = mods;
-			if ((mods3 & mods2) <= Mods.None)
-         */
-        private static readonly OpCode[] Signature =
-        {
-            OpCodes.Ldarg_0,
-            OpCodes.Ldfld,
-            OpCodes.Ldfld,
-            OpCodes.Brfalse,
-            OpCodes.Ldarg_0,
-            OpCodes.Ldfld,
-            OpCodes.Brtrue,
-            OpCodes.Ldsfld,
-            OpCodes.Ldfld,
-            OpCodes.Call,
-            OpCodes.Ldc_I4,
-            OpCodes.Stloc_2,
-            OpCodes.Stloc_1,
-            OpCodes.Ldloc_1,
-            OpCodes.Ldloc_2,
-            OpCodes.And,
-            OpCodes.Ldc_I4_0,
-            OpCodes.Cgt,
-            OpCodes.Brtrue,
-            OpCodes.Ldsfld,
-            OpCodes.Ldfld,
-            OpCodes.Call,
-            OpCodes.Ldc_I4,
-            OpCodes.Stloc_2,
-            OpCodes.Stloc_1,
-            OpCodes.Ldloc_1,
-            OpCodes.Ldloc_2,
-            OpCodes.And,
-            OpCodes.Ldc_I4_0,
-            OpCodes.Cgt,
-            OpCodes.Brtrue
-        };
-
         [HarmonyTargetMethod]
         [UsedImplicitly]
-        private static MethodBase Target() => ILPatch.FindMethodBySignature(Signature);
+        private static MethodBase Target() => ILPatch.FindMethodBySignature(Patterns.PatchAutoSaveRelaxScores_Target);
 
         [HarmonyTranspiler]
         [UsedImplicitly]
@@ -85,6 +44,9 @@ namespace _patcher.Patch
             return codes.AsEnumerable();
         }
 
+        /// <summary>
+        /// Checks if Relax patch is enabled.
+        /// </summary>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static bool PatchRelax() => !Options.Options.Config.PatchRelax;
     }
