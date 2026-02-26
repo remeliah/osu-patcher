@@ -1,7 +1,7 @@
 using System.Reflection;
 using JetBrains.Annotations;
-using _patcher.Helpers;
 using _patcher.Constants;
+using _patcher.Helpers;
 
 namespace _patcher.Wrappers
 {

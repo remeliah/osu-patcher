@@ -1,9 +1,9 @@
-using _patcher.Helpers;
 using System;
 using System.Linq;
 using System.Reflection;
 using System.Reflection.Emit;
 using _patcher.Constants;
+using _patcher.Helpers;
 
 namespace _patcher.Options
 {

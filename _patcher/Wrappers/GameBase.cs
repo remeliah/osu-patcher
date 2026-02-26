@@ -1,6 +1,6 @@
 using System.Reflection;
-using _patcher.Helpers;
 using _patcher.Constants;
+using _patcher.Helpers;
 
 namespace _patcher.Wrappers
 {

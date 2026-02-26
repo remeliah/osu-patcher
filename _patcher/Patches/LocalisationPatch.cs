@@ -1,11 +1,11 @@
 using System.Collections.Generic;
 using System.Linq;
-using System.Reflection.Emit;
 using System.Reflection;
+using System.Reflection.Emit;
 using HarmonyLib;
 using JetBrains.Annotations;
-using _patcher.Helpers;
 using _patcher.Constants;
+using _patcher.Helpers;
 
 namespace _patcher.Patches
 {

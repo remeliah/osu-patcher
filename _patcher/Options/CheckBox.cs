@@ -1,8 +1,8 @@
 using System;
 using System.Reflection;
 using System.Reflection.Emit;
-using _patcher.Helpers;
 using _patcher.Constants;
+using _patcher.Helpers;
 
 namespace _patcher.Options
 {

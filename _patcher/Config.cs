@@ -1,6 +1,6 @@
-﻿using _patcher.Utils;
 using System;
 using System.IO;
+using _patcher.Utils;
 
 namespace _patcher
 {

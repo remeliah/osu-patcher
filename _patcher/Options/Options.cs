@@ -3,9 +3,9 @@ using System.Reflection;
 using System.Reflection.Emit;
 using HarmonyLib;
 using JetBrains.Annotations;
-using _patcher.Utils;
-using _patcher.Helpers;
 using _patcher.Constants;
+using _patcher.Helpers;
+using _patcher.Utils;
 
 namespace _patcher.Options
 {

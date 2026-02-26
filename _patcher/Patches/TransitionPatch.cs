@@ -1,11 +1,11 @@
 using System.Collections.Generic;
 using System.Linq;
-using System.Reflection.Emit;
 using System.Reflection;
-using _patcher.Helpers;
-using HarmonyLib;
+using System.Reflection.Emit;
 using System.Runtime.CompilerServices;
+using HarmonyLib;
 using _patcher.Constants;
+using _patcher.Helpers;
 
 namespace _patcher.Patches
 {

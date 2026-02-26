@@ -2,10 +2,9 @@ using System;
 using System.Reflection;
 using HarmonyLib;
 using JetBrains.Annotations;
-using _patcher.Helpers;
 using _patcher.Constants;
+using _patcher.Helpers;
 using _patcher.Utils;
-using _patcher.Options;
 
 namespace _patcher.Patches
 {
