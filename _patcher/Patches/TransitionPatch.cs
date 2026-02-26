@@ -7,24 +7,8 @@ using HarmonyLib;
 using System.Runtime.CompilerServices;
 using _patcher.Constants;
 
-namespace _patcher.Patch
+namespace _patcher.Patches
 {
-    /// <summary>
-    /// Provides base game functionality patches and utilities.
-    /// </summary>
-    internal class GameBase
-    {
-        private static readonly MethodBase BaseBeginExit = ILPatch.FindMethodBySignature(Patterns.GameBase_BeginExit);
-        
-        /// <summary>
-        /// Initiates the game exit sequence.
-        /// </summary>
-        /// <param name="forceConfirm">If set to <c>true</c>, forces confirmation dialog.</param>
-        public static void BeginExit(
-            bool forceConfirm = false)
-         => BaseBeginExit.Invoke(null, new object[] { forceConfirm });
-    }
-
     /// <summary>
     /// Patches the game transition time to speed up screen transitions.
     /// </summary>
@@ -53,7 +37,7 @@ namespace _patcher.Patch
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static float TransitionTime()
         {
-            if (!Options.Options.Config.TransitionTime) 
+            if (!Options.Options.Config.TransitionTime)
                 return 100;
 
             return 200;

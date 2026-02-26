@@ -7,7 +7,7 @@ using JetBrains.Annotations;
 using _patcher.Helpers;
 using _patcher.Constants;
 
-namespace _patcher.Patch
+namespace _patcher.Patches
 {
     /// <summary>
     /// Patches the LocalisationManager to modify string retrieval.

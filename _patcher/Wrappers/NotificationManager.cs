@@ -1,10 +1,9 @@
-using System.Reflection.Emit;
 using System.Reflection;
 using JetBrains.Annotations;
 using _patcher.Helpers;
 using _patcher.Constants;
 
-namespace _patcher.Patch
+namespace _patcher.Wrappers
 {
     /// <summary>
     /// Manages in-game notifications.
@@ -25,9 +24,9 @@ namespace _patcher.Patch
         public static void ShowMessage(
             string message,
             object color,
-            int time = 5000) 
+            int time = 5000)
          => BaseShowMessage.Invoke(null, new object[] { message, color, time, null });
-        
+
         /// <summary>
         /// Shows a massive notification message.
         /// </summary>
@@ -39,7 +38,7 @@ namespace _patcher.Patch
             int time = 5000,
             NotificationType notificationType = NotificationType.Info)
         => BaseShowMessageMassive.Invoke(null, new object[] { message, time, notificationType });
-        
+
         /// <summary>
         /// Defines the type of notification.
         /// </summary>

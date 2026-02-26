@@ -1,42 +1,37 @@
 using System.Collections.Generic;
-using System.Linq;
 using System.Reflection.Emit;
 using System.Reflection;
+using System.Linq;
 using System.Runtime.CompilerServices;
 using HarmonyLib;
-using _patcher.Helpers;
 using JetBrains.Annotations;
+using _patcher.Helpers;
 using _patcher.Constants;
 
-namespace _patcher.Patch
+namespace _patcher.Patches
 {
     /// <summary>
-    /// Patch to allow saving scores even when Relax mod is active.
+    /// patch relax miss
     /// </summary>
     [HarmonyPatch]
     [UsedImplicitly]
-    internal class PatchAutoSaveRelaxScores
+    internal class PatchRelaxMiss
     {
         [HarmonyTargetMethod]
         [UsedImplicitly]
-        private static MethodBase Target() => ILPatch.FindMethodBySignature(Patterns.PatchAutoSaveRelaxScores_Target);
+        private static MethodBase Target() => ILPatch.FindMethodBySignature(Patterns.PatchRelaxMiss_Target);
 
         [HarmonyTranspiler]
         [UsedImplicitly]
         private static IEnumerable<CodeInstruction> Transpiler(IEnumerable<CodeInstruction> instructions)
         {
             var codes = new List<CodeInstruction>(instructions);
-
-            codes.InsertRange(33, new[]
+            codes.RemoveAt(664);
+            codes.InsertRange(665, new CodeInstruction[]
             {
-                new CodeInstruction(OpCodes.Call, typeof(PatchAutoSaveRelaxScores)
-                    .GetMethod(nameof(PatchRelax), BindingFlags.Public | BindingFlags.Static)),
-                new CodeInstruction(OpCodes.And)
-            });
-
-            codes.InsertRange(21, new[]
-            {
-                new CodeInstruction(OpCodes.Call, typeof(PatchAutoSaveRelaxScores)
+                new CodeInstruction(OpCodes.Or),
+                new CodeInstruction(OpCodes.Call,
+                    typeof(PatchRelaxMiss)
                     .GetMethod(nameof(PatchRelax), BindingFlags.Public | BindingFlags.Static)),
                 new CodeInstruction(OpCodes.And)
             });
@@ -44,9 +39,6 @@ namespace _patcher.Patch
             return codes.AsEnumerable();
         }
 
-        /// <summary>
-        /// Checks if Relax patch is enabled.
-        /// </summary>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static bool PatchRelax() => !Options.Options.Config.PatchRelax;
     }

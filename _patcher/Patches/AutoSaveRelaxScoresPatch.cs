@@ -1,35 +1,42 @@
 using System.Collections.Generic;
 using System.Linq;
-using System.Reflection;
 using System.Reflection.Emit;
+using System.Reflection;
 using System.Runtime.CompilerServices;
 using HarmonyLib;
-using JetBrains.Annotations;
 using _patcher.Helpers;
+using JetBrains.Annotations;
 using _patcher.Constants;
 
-namespace _patcher.Patch
+namespace _patcher.Patches
 {
     /// <summary>
-    /// Patch to prevent combo breaks when Relax mod is active.
+    /// Patch to allow saving scores even when Relax mod is active.
     /// </summary>
     [HarmonyPatch]
     [UsedImplicitly]
-    internal class PatchRelaxComboBreak
+    internal class PatchAutoSaveRelaxScores
     {
         [HarmonyTargetMethod]
-        private static MethodBase Target() => ILPatch.FindMethodBySignature(Patterns.PatchRelaxComboBreak_Target);
+        [UsedImplicitly]
+        private static MethodBase Target() => ILPatch.FindMethodBySignature(Patterns.PatchAutoSaveRelaxScores_Target);
 
         [HarmonyTranspiler]
+        [UsedImplicitly]
         private static IEnumerable<CodeInstruction> Transpiler(IEnumerable<CodeInstruction> instructions)
         {
             var codes = new List<CodeInstruction>(instructions);
-            codes.RemoveAt(1558);
-            codes.InsertRange(1559, new CodeInstruction[]
+
+            codes.InsertRange(33, new[]
             {
-                new CodeInstruction(OpCodes.Or),
-                new CodeInstruction(OpCodes.Call,
-                    typeof(PatchRelaxComboBreak)
+                new CodeInstruction(OpCodes.Call, typeof(PatchAutoSaveRelaxScores)
+                    .GetMethod(nameof(PatchRelax), BindingFlags.Public | BindingFlags.Static)),
+                new CodeInstruction(OpCodes.And)
+            });
+
+            codes.InsertRange(21, new[]
+            {
+                new CodeInstruction(OpCodes.Call, typeof(PatchAutoSaveRelaxScores)
                     .GetMethod(nameof(PatchRelax), BindingFlags.Public | BindingFlags.Static)),
                 new CodeInstruction(OpCodes.And)
             });

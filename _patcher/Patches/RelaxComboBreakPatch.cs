@@ -1,37 +1,35 @@
 using System.Collections.Generic;
-using System.Reflection.Emit;
-using System.Reflection;
 using System.Linq;
+using System.Reflection;
+using System.Reflection.Emit;
 using System.Runtime.CompilerServices;
 using HarmonyLib;
 using JetBrains.Annotations;
 using _patcher.Helpers;
 using _patcher.Constants;
 
-namespace _patcher.Patch
+namespace _patcher.Patches
 {
     /// <summary>
-    /// patch relax miss
+    /// Patch to prevent combo breaks when Relax mod is active.
     /// </summary>
     [HarmonyPatch]
     [UsedImplicitly]
-    internal class PatchRelaxMiss
+    internal class PatchRelaxComboBreak
     {
         [HarmonyTargetMethod]
-        [UsedImplicitly]
-        private static MethodBase Target() => ILPatch.FindMethodBySignature(Patterns.PatchRelaxMiss_Target);
+        private static MethodBase Target() => ILPatch.FindMethodBySignature(Patterns.PatchRelaxComboBreak_Target);
 
         [HarmonyTranspiler]
-        [UsedImplicitly]
         private static IEnumerable<CodeInstruction> Transpiler(IEnumerable<CodeInstruction> instructions)
         {
             var codes = new List<CodeInstruction>(instructions);
-            codes.RemoveAt(664);
-            codes.InsertRange(665, new CodeInstruction[]
+            codes.RemoveAt(1558);
+            codes.InsertRange(1559, new CodeInstruction[]
             {
                 new CodeInstruction(OpCodes.Or),
                 new CodeInstruction(OpCodes.Call,
-                    typeof(PatchRelaxMiss)
+                    typeof(PatchRelaxComboBreak)
                     .GetMethod(nameof(PatchRelax), BindingFlags.Public | BindingFlags.Static)),
                 new CodeInstruction(OpCodes.And)
             });
@@ -39,6 +37,9 @@ namespace _patcher.Patch
             return codes.AsEnumerable();
         }
 
+        /// <summary>
+        /// Checks if Relax patch is enabled.
+        /// </summary>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static bool PatchRelax() => !Options.Options.Config.PatchRelax;
     }
