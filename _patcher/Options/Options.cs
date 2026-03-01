@@ -52,10 +52,7 @@ namespace _patcher.Options
         private static void Add(object instance, Element element)
             => BaseAddElement.Invoke(instance, new[] { element.V });
 
-        #region optsign
-
         private static readonly MethodBase BaseAddElement = ILPatch.FindMethodBySignature(Patterns.Options_AddElement);
-        #endregion
     }
 
 }
