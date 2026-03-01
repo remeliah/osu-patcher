@@ -32,10 +32,16 @@ namespace _patcher.Options
                 "Control how fast the screen fades in and out. Turn this on for quicker transitions.",
                 Config.TransitionTime,
                 Config.ToggleTransitionTime);
-            
+
+            CheckBox performanceCalculator = new CheckBox("Performance Calculator",
+                "Let the patcher calculate your plays ingame.",
+                Config.PerformanceCalculator,
+                Config.TogglePerformanceCalculator);
+
             Array optionsChildren = Element.CreateArray(
                 alwaysShowMisses,
-                transitionTime);
+                transitionTime,
+                performanceCalculator);
 
             Section section = new Section("Patches");
             section.SetChildren(optionsChildren);

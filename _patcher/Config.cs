@@ -15,6 +15,7 @@ namespace _patcher
 
         public bool PatchRelax { get; set; } = true;
         public bool TransitionTime { get; set; } = true;
+        public bool PerformanceCalculator { get; set; } = true;
 
         internal static Config _load()
         {
@@ -56,5 +57,6 @@ namespace _patcher
 
         public void TogglePatchRelax(object sender, EventArgs e) => ToggleSetting(nameof(PatchRelax));
         public void ToggleTransitionTime(object sender, EventArgs e) => ToggleSetting(nameof(TransitionTime));
+        public void TogglePerformanceCalculator(object sender, EventArgs e) => ToggleSetting(nameof(PerformanceCalculator));
     }
 }

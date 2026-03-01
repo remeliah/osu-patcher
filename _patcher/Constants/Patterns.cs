@@ -352,5 +352,36 @@ namespace _patcher.Constants
             OpCodes.Ldsfld,
             OpCodes.Brtrue_S
         };
+
+        public static readonly OpCode[] PlayerInitialize_Target = new[]
+        {
+            OpCodes.Ldarg_0,
+            OpCodes.Call,
+            OpCodes.Stfld,
+            OpCodes.Ldarg_0,
+            OpCodes.Call,
+            OpCodes.Ldc_I4_0,
+            OpCodes.Stsfld,
+            OpCodes.Ldsfld,
+            OpCodes.Ldarg_0,
+            OpCodes.Ldftn,
+            OpCodes.Newobj
+        };
+
+        public static readonly OpCode[] PlayerUpdate_Target = new[]
+        {
+            OpCodes.Ldarg_0,
+            OpCodes.Call,
+            OpCodes.Ldarg_0,
+            OpCodes.Call,
+            OpCodes.Brfalse_S,
+            OpCodes.Ret,
+            OpCodes.Ldarg_0,
+            OpCodes.Ldfld,
+            OpCodes.Brfalse_S,
+            OpCodes.Ldarg_0,
+            OpCodes.Ldfld,
+            OpCodes.Callvirt,
+        };
     }
 }

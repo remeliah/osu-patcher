@@ -57,8 +57,16 @@
     <Compile Include="Options\Options.cs" />
     <Compile Include="Options\Section.cs" />
     <Compile Include="Options\TextBox.cs" />
+    <Compile Include="Patches\PlayerInitializePatch.cs" />
+    <Compile Include="Patches\PerformanceCalculationPatch.cs" />
+    <Compile Include="Patches\PlayerUpdatePatch.cs" />
     <Compile Include="Patches\TransitionPatch.cs" />
     <Compile Include="Patches\LocalisationPatch.cs" />
+    <Compile Include="Performance\Calculator.cs" />
+    <Compile Include="Performance\FFI\Optionf32.cs" />
+    <Compile Include="Performance\FFI\Optionu32.cs" />
+    <Compile Include="Performance\FFI\Sliceu8.cs" />
+    <Compile Include="Resolver\Score.cs" />
     <Compile Include="Utils\BaseConfig.cs" />
     <Compile Include="Utils\Logger.cs" />
     <Compile Include="Main.cs" />

@@ -34,7 +34,7 @@ namespace _patcher.Patches
                 new CodeInstruction(OpCodes.Ldarg_0),
                 new CodeInstruction(OpCodes.Ldc_I4, OsuConstants.TryLazer),
                 new CodeInstruction(OpCodes.Ble_S, skip),
-                new CodeInstruction(OpCodes.Ldstr, "Re;FX"),
+                new CodeInstruction(OpCodes.Ldstr, "Patcher"),
                 new CodeInstruction(OpCodes.Ret)
             });
             
