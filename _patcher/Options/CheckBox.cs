@@ -1,26 +1,19 @@
-﻿using System;
+using System;
 using System.Reflection;
 using System.Reflection.Emit;
+using _patcher.Constants;
 using _patcher.Helpers;
 
 namespace _patcher.Options
 {
+    /// <summary>
+    /// Represents a checkbox UI element.
+    /// </summary>
     internal class CheckBox : Element
     {
         private static ConstructorInfo _boolCons;
 
-        private static readonly ConstructorInfo BaseCheckBox = ILPatch.FindConstructorBySignature(new[]
-        {
-            OpCodes.Ldarg_0,
-            OpCodes.Ldarg_3,
-            OpCodes.Stfld,
-            OpCodes.Ldarg_3,
-            OpCodes.Brfalse_S,
-            OpCodes.Ldarg_3,
-            OpCodes.Ldarg_0,
-            OpCodes.Ldftn,
-            OpCodes.Newobj
-        });
+        private static readonly ConstructorInfo BaseCheckBox = ILPatch.FindConstructorBySignature(Patterns.CheckBox_Constructor);
 
         public CheckBox(string title, string tooltip, bool initial, EventHandler onChanged)
             : base(CreateCheckBoxInstance(title, tooltip, initial, onChanged))

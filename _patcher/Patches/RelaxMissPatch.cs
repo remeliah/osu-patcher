@@ -1,52 +1,37 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using System.Reflection.Emit;
 using System.Runtime.CompilerServices;
 using HarmonyLib;
 using JetBrains.Annotations;
+using _patcher.Constants;
 using _patcher.Helpers;
 
-namespace _patcher.Patch
+namespace _patcher.Patches
 {
     /// <summary>
-    /// patch relax combo break
+    /// patch relax miss
     /// </summary>
     [HarmonyPatch]
     [UsedImplicitly]
-    internal class PatchRelaxComboBreak
+    internal class PatchRelaxMiss
     {
-        // osu.GameModes.Play.Rulesets.Ruleset::IncreaseScoreHit
-        /* 
-           if (this.#=z$kEf6vEzCgIu.#=zpQm6Nqd6BI0u() > 20 && !#=zS_AS2zptucP0wp1z7HOrPzQb$3ab.#=z98ZION9Ll4et$efEiA== && 
-           !#=zS_AS2zptucP0wp1z7HOrPzQb$3ab.#=zcxdiu2iP13Mis9wLlw==)
-         */
-        private static readonly OpCode[] Signature = new[]
-        {
-            OpCodes.Ldarg_0,
-            OpCodes.Ldfld,
-            OpCodes.Callvirt,
-            OpCodes.Ldc_I4_S,
-            OpCodes.Ble_S,
-            OpCodes.Ldsfld,
-            OpCodes.Brtrue_S,
-            OpCodes.Ldsfld,
-            OpCodes.Brtrue_S
-        };
-
         [HarmonyTargetMethod]
-        private static MethodBase Target() => ILPatch.FindMethodBySignature(Signature);
+        [UsedImplicitly]
+        private static MethodBase Target() => ILPatch.FindMethodBySignature(Patterns.PatchRelaxMiss_Target);
 
         [HarmonyTranspiler]
+        [UsedImplicitly]
         private static IEnumerable<CodeInstruction> Transpiler(IEnumerable<CodeInstruction> instructions)
         {
             var codes = new List<CodeInstruction>(instructions);
-            codes.RemoveAt(1558);
-            codes.InsertRange(1559, new CodeInstruction[]
+            codes.RemoveAt(664);
+            codes.InsertRange(665, new CodeInstruction[]
             {
                 new CodeInstruction(OpCodes.Or),
                 new CodeInstruction(OpCodes.Call,
-                    typeof(PatchRelaxComboBreak)
+                    typeof(PatchRelaxMiss)
                     .GetMethod(nameof(PatchRelax), BindingFlags.Public | BindingFlags.Static)),
                 new CodeInstruction(OpCodes.And)
             });

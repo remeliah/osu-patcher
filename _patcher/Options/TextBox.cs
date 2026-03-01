@@ -1,27 +1,18 @@
-﻿using System.Reflection;
+using System.Reflection;
 using System.Reflection.Emit;
+using _patcher.Constants;
 using _patcher.Helpers;
 
 namespace _patcher.Options
 {
+    /// <summary>
+    /// Represents a textbox UI element.
+    /// </summary>
     internal class TextBox : Element
     {
         private static ConstructorInfo _bindableCons;
 
-        private static readonly ConstructorInfo BaseTextBox = ILPatch.FindConstructorBySignature(new[]
-        {
-            OpCodes.Ldarg_0,
-            OpCodes.Ldarg_1,
-            OpCodes.Ldarg_3,
-            OpCodes.Call,
-            OpCodes.Ldloc_0,
-            OpCodes.Ldarg_0,
-            OpCodes.Stfld,
-            OpCodes.Ldarg_0,
-            OpCodes.Ldloc_0,
-            OpCodes.Ldfld,
-            OpCodes.Stfld
-        });
+        private static readonly ConstructorInfo BaseTextBox = ILPatch.FindConstructorBySignature(Patterns.TextBox_Constructor);
 
         public TextBox(string title, string initial, bool passwordBox = false)
             : base(CreateTextBoxInstance(title, initial, passwordBox))

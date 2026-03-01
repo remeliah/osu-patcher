@@ -1,7 +1,8 @@
-﻿using System;
-using _patcher.Patch;
-using _patcher.Utils;
+using System;
+using System.Linq;
 using HarmonyLib;
+using _patcher.Utils;
+using _patcher.Wrappers;
 
 namespace _patcher
 {

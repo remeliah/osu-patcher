@@ -1,52 +1,21 @@
-﻿using _patcher.Helpers;
 using System;
 using System.Linq;
 using System.Reflection;
 using System.Reflection.Emit;
+using _patcher.Constants;
+using _patcher.Helpers;
 
 namespace _patcher.Options
 {
+    /// <summary>
+    /// Base class for UI elements in the options menu.
+    /// </summary>
     internal class Element
     {
         internal object V { get; set; }
         protected Element(object v) => V = v;
 
-        private static readonly MethodBase BaseSetChildren = ILPatch.FindMethodBySignature(new[]
-        {
-            OpCodes.Ldarg_0,
-            OpCodes.Ldarg_1,
-            OpCodes.Stfld,
-            OpCodes.Ldarg_0,
-            OpCodes.Ldfld,
-            OpCodes.Brfalse_S,
-            OpCodes.Ldarg_0,
-            OpCodes.Ldfld,
-            OpCodes.Callvirt,
-            OpCodes.Stloc_0,
-            OpCodes.Br_S,
-            OpCodes.Ldloc_0,
-            OpCodes.Callvirt,
-            OpCodes.Stloc_1,
-            OpCodes.Ldloc_1,
-            OpCodes.Ldarg_0,
-            OpCodes.Stfld,
-            OpCodes.Ldarg_0,
-            OpCodes.Call,
-            OpCodes.Brfalse_S,
-            OpCodes.Ldloc_1,
-            OpCodes.Ldc_I4_1,
-            OpCodes.Callvirt,
-            OpCodes.Ldloc_0,
-            OpCodes.Callvirt,
-            OpCodes.Brtrue_S,
-            OpCodes.Leave_S,
-            OpCodes.Ldloc_0,
-            OpCodes.Brfalse_S,
-            OpCodes.Ldloc_0,
-            OpCodes.Callvirt,
-            OpCodes.Endfinally,
-
-        });
+        private static readonly MethodBase BaseSetChildren = ILPatch.FindMethodBySignature(Patterns.Element_SetChildren);
 
         public static Array CreateArray(params Element[] elements)
         {

@@ -1,6 +1,6 @@
-﻿using _patcher.Patch;
-using HarmonyLib;
 using System.Reflection;
+using HarmonyLib;
+using _patcher.Wrappers;
 
 namespace _patcher.Utils
 {
