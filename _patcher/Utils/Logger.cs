@@ -11,7 +11,7 @@ namespace _patcher.Utils
             string color = "Red",
             int timer = 15000)
         {
-            using (var writer = new System.IO.StreamWriter("Logs/patcher.txt", true))
+            using (var writer = new System.IO.StreamWriter("Logs/patcher.log", true))
                 writer.WriteLine(message);
 
             NotificationManager.ShowMessage(

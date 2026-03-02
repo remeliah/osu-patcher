@@ -138,9 +138,6 @@ namespace _patcher.Patches
                 return;
 
             _currentScore = Score.GetCurrentScoreField(playerInstance);
-
-            if (_currentScore != null)
-                Logger.log($"[PlayerUpdatePatch] Resolved currentScore field");
         }
     }
 }

@@ -34,7 +34,6 @@ namespace _patcher.Patches
                     {
                         double pp = _calculator.CalculateScore(score, accuracy, totalHits, maxCombo, playMode);
                         _currentPP = Math.Round(pp, 2);
-                        Logger.log($"[PP] Current PP: {_currentPP}");
 
                         // todo: update ui
                     }
