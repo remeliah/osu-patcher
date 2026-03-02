@@ -4,7 +4,6 @@ using _patcher.Performance;
 using _patcher.Resolver;
 using _patcher.Utils;
 using HarmonyLib;
-using JetBrains.Annotations;
 using System;
 using System.IO;
 using System.Linq;
@@ -13,7 +12,6 @@ using System.Reflection;
 namespace _patcher.Patches
 {
     [HarmonyPatch]
-    [UsedImplicitly]
     internal class PlayerInitializePatch
     {
         private static Type _beatmapType;
@@ -21,12 +19,10 @@ namespace _patcher.Patches
         private static MethodInfo _getBeatmapStreamMethod;
 
         [HarmonyTargetMethod]
-        [UsedImplicitly]
         private static MethodBase Target()
             => ILPatch.FindMethodBySignature(Patterns.PlayerInitialize_Target);
 
         [HarmonyPostfix]
-        [UsedImplicitly]
         private static void Postfix(object __instance)
         {
             try

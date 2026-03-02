@@ -4,7 +4,6 @@ using System.Reflection;
 using System.Reflection.Emit;
 using System.Runtime.CompilerServices;
 using HarmonyLib;
-using JetBrains.Annotations;
 using _patcher.Constants;
 using _patcher.Helpers;
 
@@ -14,15 +13,12 @@ namespace _patcher.Patches
     /// Patch to allow saving scores even when Relax mod is active.
     /// </summary>
     [HarmonyPatch]
-    [UsedImplicitly]
     internal class PatchAutoSaveRelaxScores
     {
         [HarmonyTargetMethod]
-        [UsedImplicitly]
         private static MethodBase Target() => ILPatch.FindMethodBySignature(Patterns.PatchAutoSaveRelaxScores_Target);
 
         [HarmonyTranspiler]
-        [UsedImplicitly]
         private static IEnumerable<CodeInstruction> Transpiler(IEnumerable<CodeInstruction> instructions)
         {
             var codes = new List<CodeInstruction>(instructions);

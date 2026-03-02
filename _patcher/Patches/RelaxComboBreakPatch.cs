@@ -4,7 +4,6 @@ using System.Reflection;
 using System.Reflection.Emit;
 using System.Runtime.CompilerServices;
 using HarmonyLib;
-using JetBrains.Annotations;
 using _patcher.Constants;
 using _patcher.Helpers;
 
@@ -14,7 +13,6 @@ namespace _patcher.Patches
     /// Patch to prevent combo breaks when Relax mod is active.
     /// </summary>
     [HarmonyPatch]
-    [UsedImplicitly]
     internal class PatchRelaxComboBreak
     {
         [HarmonyTargetMethod]
