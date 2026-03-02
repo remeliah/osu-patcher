@@ -1,5 +1,4 @@
 using System.Reflection;
-using JetBrains.Annotations;
 using _patcher.Constants;
 using _patcher.Helpers;
 
@@ -8,7 +7,6 @@ namespace _patcher.Wrappers
     /// <summary>
     /// Manages in-game notifications.
     /// </summary>
-    [UsedImplicitly]
     internal class NotificationManager
     {
         private static readonly MethodBase BaseShowMessage = ILPatch.FindMethodBySignature(Patterns.NotificationManager_ShowMessage);

@@ -2,7 +2,6 @@ using System;
 using System.Reflection;
 using System.Reflection.Emit;
 using HarmonyLib;
-using JetBrains.Annotations;
 using _patcher.Constants;
 using _patcher.Helpers;
 using _patcher.Utils;
@@ -12,7 +11,6 @@ namespace _patcher.Options
     /// <summary>
     /// Manages the configuration options for the patcher.
     /// </summary>
-    [UsedImplicitly]
     internal class Options
     {
         public static readonly Config Config = Config._load();

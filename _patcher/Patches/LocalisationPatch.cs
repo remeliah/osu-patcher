@@ -3,7 +3,6 @@ using System.Linq;
 using System.Reflection;
 using System.Reflection.Emit;
 using HarmonyLib;
-using JetBrains.Annotations;
 using _patcher.Constants;
 using _patcher.Helpers;
 
@@ -13,15 +12,12 @@ namespace _patcher.Patches
     /// Patches the LocalisationManager to modify string retrieval.
     /// </summary>
     [HarmonyPatch]
-    [UsedImplicitly]
     public class LocalisationManager
     {
         [HarmonyTargetMethod]
-        [UsedImplicitly]
         private static MethodBase Target() => ILPatch.FindMethodBySignature(Patterns.LocalisationManager_Target);
 
         [HarmonyTranspiler]
-        [UsedImplicitly]
         private static IEnumerable<CodeInstruction> Transpiler(IEnumerable<CodeInstruction> instructions, ILGenerator il)
         {
             var codes = new List<CodeInstruction>(instructions);
