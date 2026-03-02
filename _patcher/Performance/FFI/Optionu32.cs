@@ -7,8 +7,10 @@ namespace _patcher.Performance.FFI
     [StructLayout(LayoutKind.Sequential)]
     public partial struct Optionu32
     {
-        private uint Value;
-        private byte IsSome;
+        ///Element that is maybe valid.
+        uint t;
+        ///Byte where `1` means element `t` is valid.
+        byte is_some;
     }
 
     public partial struct Optionu32
@@ -16,18 +18,18 @@ namespace _patcher.Performance.FFI
         public static Optionu32 FromNullable(uint? nullable)
         {
             var result = new Optionu32();
-            if (!nullable.HasValue)
-                return result;
-
-            result.IsSome = 1;
-            result.Value = nullable.Value;
+            if (nullable.HasValue)
+            {
+                result.is_some = 1;
+                result.t = nullable.Value;
+            }
 
             return result;
         }
 
         public uint? ToNullable()
         {
-            return IsSome == 1 ? (uint?)Value : null;
+            return this.is_some == 1 ? this.t : (uint?)null;
         }
     }
 }

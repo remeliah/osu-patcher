@@ -125,9 +125,9 @@ namespace _patcher.Patches
 
             _getBeatmapStreamMethod = _beatmapType
                 .GetMethods(BindingFlags.Instance | BindingFlags.NonPublic)
-                .FirstOrDefault(m =>
-                    m.ReturnType == typeof(Stream) &&
-                    m.GetParameters().Length == 0);
+                .Where(m => m.ReturnType == typeof(Stream) && m.GetParameters().Length == 0)
+                .Skip(1) // first one is for audio.
+                .FirstOrDefault();
         }
     }
 }

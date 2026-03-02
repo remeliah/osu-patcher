@@ -63,7 +63,6 @@
     <Compile Include="Patches\TransitionPatch.cs" />
     <Compile Include="Patches\LocalisationPatch.cs" />
     <Compile Include="Performance\Calculator.cs" />
-    <Compile Include="Performance\FFI\Optionf32.cs" />
     <Compile Include="Performance\FFI\Optionu32.cs" />
     <Compile Include="Performance\FFI\Sliceu8.cs" />
     <Compile Include="Resolver\Score.cs" />

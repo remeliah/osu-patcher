@@ -1,10 +1,12 @@
 ﻿using _patcher.Performance.FFI;
+using _patcher.Utils;
 using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Reflection;
 using System.Runtime.InteropServices;
+using static System.Net.Mime.MediaTypeNames;
 
 namespace _patcher.Performance
 {
@@ -16,14 +18,9 @@ namespace _patcher.Performance
             uint mode,
             uint mods,
             uint max_combo,
-            Optionf64 accuracy,
-            Optionu32 count_300, //unused
-            Optionu32 count_100, //unused
-            Optionu32 count_50, //unused
+            float accuracy,
             uint miss_count,
             Optionu32 passed_objects);
-
-        public uint MaxCombo { get; private set; }
 
         private static MethodInfo _getBeatmapStream;
         private readonly object _beatmap;
@@ -89,12 +86,9 @@ namespace _patcher.Performance
                 _beatmapSlice,
                 (uint)playMode,
                 (uint)Convert.ToInt32(_mods),
-                MaxCombo,
-                Optionf64.FromNullable(new double?(accuracy)),
-                default,
-                default,
-                default,
-                countMiss,
+                (uint)maxCombo,
+                accuracy,
+                (uint)Convert.ToInt32(countMiss),
                 passedObjects);
 
             return result.pp;
