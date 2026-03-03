@@ -1,14 +1,11 @@
-﻿using _patcher.Performance.FFI;
-using _patcher.Utils;
+﻿using _patcher.Rosu.FFI;
 using System;
-using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Reflection;
 using System.Runtime.InteropServices;
-using static System.Net.Mime.MediaTypeNames;
 
-namespace _patcher.Performance
+namespace _patcher.Rosu
 {
     public sealed class Calculator
     {

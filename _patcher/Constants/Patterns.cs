@@ -383,5 +383,133 @@ namespace _patcher.Constants
             OpCodes.Ldfld,
             OpCodes.Callvirt,
         };
+
+        public static readonly OpCode[] PlayerOnLoadComplete_Target = new[]
+        {
+            OpCodes.Ldc_I4_0,
+            OpCodes.Stsfld,
+            OpCodes.Ldarg_1,
+            OpCodes.Brtrue_S,
+            OpCodes.Call,
+            OpCodes.Ldc_I4_1,
+            OpCodes.Call,
+            OpCodes.Ldc_I4,
+            OpCodes.Call,
+            OpCodes.Call,
+            OpCodes.Ldc_I4,
+            OpCodes.Ldnull,
+            OpCodes.Call,
+            OpCodes.Ldarg_0,
+            OpCodes.Ldfld,
+            OpCodes.Ldfld,
+            OpCodes.Newobj,
+            OpCodes.Call,
+            OpCodes.Ldc_I4_1,
+            OpCodes.Ret,
+            OpCodes.Ldarg_0,
+            OpCodes.Ldfld,
+            OpCodes.Ldfld,
+            OpCodes.Call,
+            OpCodes.Ldc_I4_1,
+            OpCodes.Call,
+            OpCodes.Ldarg_0,
+            OpCodes.Ldc_I4_1
+        };
+
+        public static readonly OpCode[] TextureManager_Load = new[]
+        {
+            OpCodes.Ldarg_0,
+            OpCodes.Brtrue_S,
+            OpCodes.Ldnull,
+            OpCodes.Ret,
+            OpCodes.Ldsfld,
+            OpCodes.Brfalse_S,
+            OpCodes.Ldarg_1,
+            OpCodes.Ldc_I4_4,
+            OpCodes.Beq_S,
+            OpCodes.Ldarg_1,
+            OpCodes.Ldc_I4_S,
+            OpCodes.And,
+        };
+
+        public static readonly OpCode[] Sprite_Constructor = new[]
+        {
+            OpCodes.Ldarg_0,
+            OpCodes.Ldarg_S,
+            OpCodes.Call,
+            OpCodes.Ldarg_0,
+            OpCodes.Ldarg_1,
+            OpCodes.Stfld,
+            OpCodes.Ldarg_0,
+            OpCodes.Ldarg_3,
+            OpCodes.Stfld,
+            OpCodes.Ldarg_0,
+            OpCodes.Callvirt,
+            OpCodes.Ldarg_0,
+            OpCodes.Callvirt
+        };
+
+        public static readonly OpCode[] Text_Constructor = new[]
+        {
+            OpCodes.Ldarg_0,
+            OpCodes.Ldc_I4_1,
+            OpCodes.Stfld,
+            OpCodes.Ldarg_0,
+            OpCodes.Ldnull,
+            OpCodes.Ldc_I4_6,
+            OpCodes.Ldc_I4_0,
+            OpCodes.Ldc_I4_0,
+            OpCodes.Ldarg_3
+        };
+
+        public static readonly OpCode[] Text_Setter = new[]
+        {
+            OpCodes.Ldarg_0,
+            OpCodes.Ldfld,
+            OpCodes.Ldarg_1,
+            OpCodes.Call,
+            OpCodes.Brfalse_S,
+            OpCodes.Ret,
+            OpCodes.Ldarg_0,
+            OpCodes.Ldc_I4_1,
+            OpCodes.Stfld,
+            OpCodes.Ldarg_0,
+            OpCodes.Ldarg_1
+        };
+
+        public static readonly OpCode[] SpriteText_Constructor = new[]
+        {
+            OpCodes.Ldarg_0,
+            OpCodes.Ldnull,
+            OpCodes.Ldarg_S,
+            OpCodes.Ldarg_S,
+            OpCodes.Ldarg_S,
+            OpCodes.Ldarg_S,
+            OpCodes.Ldarg_S,
+            OpCodes.Ldarg_S,
+            OpCodes.Ldarg_S,
+            OpCodes.Call
+        };
+
+        public static readonly OpCode[] Text_RefreshTexture = new[]
+        {
+            OpCodes.Ldarg_0,
+            OpCodes.Ldfld,
+            OpCodes.Stloc_0,
+            OpCodes.Ldarg_0,
+            OpCodes.Ldc_I4_0,
+            OpCodes.Stfld,
+            OpCodes.Ldarg_0,
+            OpCodes.Callvirt,
+            OpCodes.Call,
+            OpCodes.Brfalse_S,
+            OpCodes.Ldarg_0,
+            OpCodes.Ldflda,
+            OpCodes.Ldfld,
+            OpCodes.Ldc_R4,
+            OpCodes.Bne_Un_S,
+            OpCodes.Ldarg_0,
+            OpCodes.Ldarg_0
+        };
     }
 }

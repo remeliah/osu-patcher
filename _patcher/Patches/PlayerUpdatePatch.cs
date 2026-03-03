@@ -97,7 +97,6 @@ namespace _patcher.Patches
             if (_maxCombo == null)
                 _maxCombo = scoreType.GetFields(BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic)
                     .FirstOrDefault(f => f.FieldType == typeof(int));
-
             if (_maxCombo == null)
                 return;
 
@@ -105,23 +104,6 @@ namespace _patcher.Patches
                 _playMode = scoreType.GetFields(BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic)
                     .FirstOrDefault(f => f.FieldType.IsEnum);
             if (_playMode == null)
-                return;
-
-            var enabledModsField = scoreType.GetFields(BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic)
-               .FirstOrDefault(f => f.FieldType.IsGenericType);
-
-            var enabledMods = enabledModsField.GetValue(score);
-            var obfuscatedType = enabledMods.GetType();
-
-            var generic = obfuscatedType.GetGenericArguments()[0];
-
-            var modsValue = obfuscatedType
-                .GetMethods(BindingFlags.Instance | BindingFlags.Public)
-                .FirstOrDefault(m =>
-                    m.ReturnType == generic &&
-                    m.GetParameters().Length == 0);
-
-            if (modsValue == null)
                 return;
 
             float accuracy = (float)_getAccuracy.Invoke(score, null) * 100f;

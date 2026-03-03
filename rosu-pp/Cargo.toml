@@ -1,0 +1,18 @@
+[package]
+name = "rosu-pp"
+version = "0.1.1"
+edition = "2021"
+authors = ["remeliah <anoletenu@gmail.com>"]
+
+[lib]
+crate-type = ["cdylib", "rlib"]
+
+[dependencies]
+interoptopus = "0.14.14"
+akatsuki-pp-1-0-1 = { package = "akatsuki-pp", git = "https://github.com/osuAkatsuki/akatsuki-pp-rs", rev = "b96019f50aa7d09bcbde60016481a69df04315e4" }
+realistik-pp = { package = "akatsuki-pp", git = "https://github.com/RealistikOsu/akatsuki-pp-rs", rev = "9a58b6e8b4dc630a5d170f9caea53ec992d226f1" }
+
+[dev-dependencies]
+interoptopus_backend_csharp = "0.14.14"
+interoptopus_backend_c = "0.14.13"
+interoptopus_backend_cpython = "0.14.14"

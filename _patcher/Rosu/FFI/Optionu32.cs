@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Runtime.InteropServices;
 
-namespace _patcher.Performance.FFI
+namespace _patcher.Rosu.FFI
 {
     [Serializable]
     [StructLayout(LayoutKind.Sequential)]
