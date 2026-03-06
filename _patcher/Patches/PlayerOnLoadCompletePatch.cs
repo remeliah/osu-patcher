@@ -5,6 +5,7 @@ using _patcher.Graphics.Sprites;
 using _patcher.Graphics.Skinning;
 using _patcher.Resolver;
 using _patcher.Wrappers;
+using _patcher.Play;
 using HarmonyLib;
 using System;
 using System.Collections.Generic;
@@ -89,7 +90,7 @@ namespace _patcher.Patches
                 .Skip(1) // first one is for audio.
                 .FirstOrDefault();
 
-            var performance = new Play.Performance(beatmap, getBeatmapStreamMethod, (uint)mods, new[] { ppText });
+            var performance = new Performance(beatmap, getBeatmapStreamMethod, (uint)mods, new[] { ppText });
             PerformanceCalculationPatch.SetPerformance(performance);
         }
     }

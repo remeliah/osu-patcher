@@ -32,7 +32,7 @@ namespace _patcher.Options
                 Config.ToggleTransitionTime);
 
             CheckBox performanceCalculator = new CheckBox("Performance Calculator",
-                "Let the patcher calculate your plays ingame.",
+                "Let the patcher calculates your plays ingame.",
                 Config.PerformanceCalculator,
                 Config.TogglePerformanceCalculator);
 
@@ -58,5 +58,4 @@ namespace _patcher.Options
 
         private static readonly MethodBase BaseAddElement = ILPatch.FindMethodBySignature(Patterns.Options_AddElement);
     }
-
 }

@@ -10,7 +10,7 @@ using System.Reflection.Emit;
 
 namespace _patcher.Graphics
 {
-    internal class pText : pSpriteUnloadable
+    internal class pText : pSprite
     {
         private static readonly ConstructorInfo BaseText = ILPatch.FindConstructorBySignature(Patterns.Text_Constructor);
 

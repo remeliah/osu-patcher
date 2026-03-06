@@ -50,7 +50,6 @@
     <Compile Include="Graphics\pDrawable.cs" />
     <Compile Include="Graphics\pSprite.cs" />
     <Compile Include="Graphics\pSpriteText.cs" />
-    <Compile Include="Graphics\pSpriteUnloadable.cs" />
     <Compile Include="Graphics\pText.cs" />
     <Compile Include="Graphics\Skinning\SkinSource.cs" />
     <Compile Include="Graphics\Sprites\Clocks.cs" />
@@ -88,7 +87,6 @@
     <Compile Include="Patches\AutoSaveRelaxScoresPatch.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Helpers\ILReader.cs" />
-    <Compile Include="Wrappers\TextureManager.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

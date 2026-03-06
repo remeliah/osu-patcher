@@ -17,26 +17,6 @@ namespace _patcher.Graphics
             Instance = CreateSpriteInstance(texture, fieldType, origin, clock, posX, posY, drawDepth, alwaysDraw, colour, tag);
         }
 
-        internal pSprite(string spriteName, float posX, float posY, SkinSource source = SkinSource.All, Origins origin = Origins.Centre, Fields field = Fields.TopLeft)
-            : this(TextureManager.Load(spriteName, source), field, origin, Clocks.Game, posX, posY, 1, true, Color.White)
-        {
-        }
-
-        internal pSprite(object texture, Fields fieldType, Origins origin, Clocks clock, float posX, float posY)
-            : this(texture, fieldType, origin, clock, posX, posY, 1, false, Color.White)
-        {
-        }
-
-        internal pSprite(object texture, Origins origin, float posX, float posY, float drawDepth, bool alwaysDraw, Color colour)
-            : this(texture, Fields.TopLeft, origin, Clocks.Game, posX, posY, drawDepth, alwaysDraw, colour, null)
-        {
-        }
-
-        internal pSprite(object texture, float posX, float posY, float drawDepth, bool alwaysDraw, Color colour)
-            : this(texture, Fields.TopLeft, Origins.TopLeft, Clocks.Game, posX, posY, drawDepth, alwaysDraw, colour, null)
-        {
-        }
-
         private object CreateSpriteInstance(object texture, Fields fieldType, Origins origin, Clocks clock, float posX, float posY, float drawDepth, bool alwaysDraw, Color colour, object tag)
         {
             object startPosition = Xna.CreateVector2(posX, posY);
