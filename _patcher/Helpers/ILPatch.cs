@@ -6,6 +6,9 @@ using System.Reflection.Emit;
 
 namespace _patcher.Helpers
 {
+    /// <summary>
+    /// ILPatch class.
+    /// </summary>
     internal sealed class ILPatch
     {
         private static readonly Module OsuModule = AppDomain.CurrentDomain.GetAssemblies()

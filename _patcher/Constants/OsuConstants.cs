@@ -1,5 +1,8 @@
 namespace _patcher.Constants
 {
+    /// <summary>
+    /// OsuConstants class.
+    /// </summary>
     public static class OsuConstants
     {
         // last OsuString

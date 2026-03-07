@@ -5,6 +5,9 @@ using System.Reflection.Emit;
 
 namespace _patcher.Helpers
 {
+    /// <summary>
+    /// ILReader class.
+    /// </summary>
     internal class ILReader
     {
         private readonly byte[] _ilInstructions;

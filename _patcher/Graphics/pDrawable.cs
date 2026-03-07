@@ -1,8 +1,11 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 
 namespace _patcher.Graphics
 {
+    /// <summary>
+    /// pDrawable class.
+    /// </summary>
     internal partial class pDrawable : IDisposable, IComparable<pDrawable>
     {
         public object Instance { get; set; }

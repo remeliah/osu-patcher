@@ -7,32 +7,27 @@ using HarmonyLib;
 using _patcher.Constants;
 using _patcher.Helpers;
 
-namespace _patcher.Patches
+namespace _patcher.Patches.Relax
 {
     /// <summary>
-    /// Patch to allow saving scores even when Relax mod is active.
+    /// Patch to prevent combo breaks when Relax mod is active.
     /// </summary>
     [HarmonyPatch]
-    internal class PatchAutoSaveRelaxScores
+    internal class PatchRelaxComboBreak : BasePatch
     {
         [HarmonyTargetMethod]
-        private static MethodBase Target() => ILPatch.FindMethodBySignature(Patterns.PatchAutoSaveRelaxScores_Target);
+        private static MethodBase Target() => TargetMethodBySignature(Patterns.PatchRelaxComboBreak_Target);
 
         [HarmonyTranspiler]
         private static IEnumerable<CodeInstruction> Transpiler(IEnumerable<CodeInstruction> instructions)
         {
             var codes = new List<CodeInstruction>(instructions);
-
-            codes.InsertRange(33, new[]
+            codes.RemoveAt(1558);
+            codes.InsertRange(1559, new CodeInstruction[]
             {
-                new CodeInstruction(OpCodes.Call, typeof(PatchAutoSaveRelaxScores)
-                    .GetMethod(nameof(PatchRelax), BindingFlags.Public | BindingFlags.Static)),
-                new CodeInstruction(OpCodes.And)
-            });
-
-            codes.InsertRange(21, new[]
-            {
-                new CodeInstruction(OpCodes.Call, typeof(PatchAutoSaveRelaxScores)
+                new CodeInstruction(OpCodes.Or),
+                new CodeInstruction(OpCodes.Call,
+                    typeof(PatchRelaxComboBreak)
                     .GetMethod(nameof(PatchRelax), BindingFlags.Public | BindingFlags.Static)),
                 new CodeInstruction(OpCodes.And)
             });

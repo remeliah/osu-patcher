@@ -7,16 +7,16 @@ using HarmonyLib;
 using _patcher.Constants;
 using _patcher.Helpers;
 
-namespace _patcher.Patches
+namespace _patcher.Patches.Core
 {
     /// <summary>
     /// Patches the game transition time to speed up screen transitions.
     /// </summary>
     [HarmonyPatch]
-    internal class PatchTransition
+    internal class PatchTransition : BasePatch
     {
         [HarmonyTargetMethod]
-        private static MethodBase Target() => ILPatch.FindMethodBySignature(Patterns.PatchTransition_Target);
+        private static MethodBase Target() => TargetMethodBySignature(Patterns.PatchTransition_Target);
 
         [HarmonyTranspiler]
         private static IEnumerable<CodeInstruction> Transpiler(IEnumerable<CodeInstruction> instructions)

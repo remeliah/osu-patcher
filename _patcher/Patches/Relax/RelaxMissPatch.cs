@@ -7,16 +7,16 @@ using HarmonyLib;
 using _patcher.Constants;
 using _patcher.Helpers;
 
-namespace _patcher.Patches
+namespace _patcher.Patches.Relax
 {
     /// <summary>
     /// patch relax miss
     /// </summary>
     [HarmonyPatch]
-    internal class PatchRelaxMiss
+    internal class PatchRelaxMiss : BasePatch
     {
         [HarmonyTargetMethod]
-        private static MethodBase Target() => ILPatch.FindMethodBySignature(Patterns.PatchRelaxMiss_Target);
+        private static MethodBase Target() => TargetMethodBySignature(Patterns.PatchRelaxMiss_Target);
 
         [HarmonyTranspiler]
         private static IEnumerable<CodeInstruction> Transpiler(IEnumerable<CodeInstruction> instructions)

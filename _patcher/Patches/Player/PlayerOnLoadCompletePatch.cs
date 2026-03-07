@@ -1,27 +1,30 @@
-﻿using _patcher.Constants;
-using _patcher.Helpers;
-using _patcher.Graphics;
-using _patcher.Graphics.Sprites;
-using _patcher.Graphics.Skinning;
-using _patcher.Resolver;
-using _patcher.Wrappers;
-using _patcher.Play;
-using HarmonyLib;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Reflection;
 using System.Reflection.Emit;
 using System.Runtime.CompilerServices;
-using System.IO;
+using HarmonyLib;
+using _patcher.Constants;
+using _patcher.Graphics;
+using _patcher.Graphics.Skinning;
+using _patcher.Graphics.Sprites;
+using _patcher.Helpers;
+using _patcher.Play;
+using _patcher.Resolver;
+using _patcher.Wrappers;
 
-namespace _patcher.Patches
+namespace _patcher.Patches.Player
 {
+    /// <summary>
+    /// PlayerOnLoadCompletePatch class.
+    /// </summary>
     [HarmonyPatch]
-    internal class PlayerOnLoadCompletePatch
+    internal class PlayerOnLoadCompletePatch : BasePatch
     {
         [HarmonyTargetMethod]
-        private static MethodBase Target() => ILPatch.FindMethodBySignature(Patterns.PlayerOnLoadComplete_Target);
+        private static MethodBase Target() => TargetMethodBySignature(Patterns.PlayerOnLoadComplete_Target);
 
         [HarmonyTranspiler]
         private static IEnumerable<CodeInstruction> Transpiler(IEnumerable<CodeInstruction> instructions)

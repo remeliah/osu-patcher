@@ -1,12 +1,15 @@
-﻿using _patcher.Rosu.FFI;
 using System;
 using System.IO;
 using System.Linq;
 using System.Reflection;
 using System.Runtime.InteropServices;
+using _patcher.Rosu.FFI;
 
 namespace _patcher.Rosu
 {
+    /// <summary>
+    /// Calculator class.
+    /// </summary>
     public sealed class Calculator
     {
         [DllImport("rosu-pp", CallingConvention = CallingConvention.Cdecl)]
@@ -108,6 +111,9 @@ namespace _patcher.Rosu
             Dispose();
         }
     }
+    /// <summary>
+    /// CalculateResult struct.
+    /// </summary>
 
     [Serializable]
     [StructLayout(LayoutKind.Sequential)]

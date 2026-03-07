@@ -6,6 +6,9 @@ using _patcher.Wrappers;
 
 namespace _patcher
 {
+    /// <summary>
+    /// Main class.
+    /// </summary>
     public class Main
     {
         private static readonly Harmony Harmony = new Harmony("osu_patcher.ano");

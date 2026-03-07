@@ -4,6 +4,9 @@ using _patcher.Utils;
 
 namespace _patcher
 {
+    /// <summary>
+    /// Config class.
+    /// </summary>
     internal class Config : BaseConfig
     {
         private const string ConfigFileName = "config.ini";

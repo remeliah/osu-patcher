@@ -5,6 +5,9 @@ using System.Reflection;
 
 namespace _patcher.Utils
 {
+    /// <summary>
+    /// BaseConfig class.
+    /// </summary>
     internal abstract class BaseConfig
     {
         internal void _saveConfig(StreamWriter writer)

@@ -1,7 +1,10 @@
-﻿using System;
+using System;
 
 namespace _patcher.Graphics.Skinning
 {
+    /// <summary>
+    /// SkinSource enum.
+    /// </summary>
     [Flags]
     public enum SkinSource
     {

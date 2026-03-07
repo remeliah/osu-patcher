@@ -1,10 +1,13 @@
-﻿using System;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Runtime.InteropServices;
 
 namespace _patcher.Rosu.FFI
 {
+    /// <summary>
+    /// Sliceu8 struct.
+    /// </summary>
     [Serializable]
     [StructLayout(LayoutKind.Sequential)]
     public partial struct Sliceu8
@@ -14,6 +17,9 @@ namespace _patcher.Rosu.FFI
         ///Number of elements.
         ulong len;
     }
+    /// <summary>
+    /// Sliceu8 struct.
+    /// </summary>
 
     public partial struct Sliceu8 : IEnumerable<byte>
     {

@@ -1,19 +1,22 @@
-﻿using _patcher.Constants;
-using _patcher.Helpers;
-using _patcher.Resolver;
-using _patcher.Utils;
-using HarmonyLib;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using System.Reflection.Emit;
 using System.Runtime.CompilerServices;
+using HarmonyLib;
+using _patcher.Constants;
+using _patcher.Helpers;
+using _patcher.Resolver;
+using _patcher.Utils;
 
-namespace _patcher.Patches
+namespace _patcher.Patches.Player
 {
+    /// <summary>
+    /// PlayerUpdatePatch class.
+    /// </summary>
     [HarmonyPatch]
-    internal class PlayerUpdatePatch
+    internal class PlayerUpdatePatch : BasePatch
     {
         private static FieldInfo _currentScore;
         private static MethodInfo _getAccuracy;
@@ -24,7 +27,7 @@ namespace _patcher.Patches
 
         [HarmonyTargetMethod]
         private static MethodBase Target()
-            => ILPatch.FindMethodBySignature(Patterns.PlayerUpdate_Target);
+            => TargetMethodBySignature(Patterns.PlayerUpdate_Target);
 
         [HarmonyTranspiler]
         private static IEnumerable<CodeInstruction> Transpiler(IEnumerable<CodeInstruction> instructions, ILGenerator il)

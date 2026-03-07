@@ -5,16 +5,16 @@ using _patcher.Constants;
 using _patcher.Helpers;
 using _patcher.Utils;
 
-namespace _patcher.Patches
+namespace _patcher.Patches.UI
 {
     /// <summary>
     /// Patches the options menu to include custom patcher options.
     /// </summary>
     [HarmonyPatch]
-    internal class OptionsPatch
+    internal class OptionsPatch : BasePatch
     {
         [HarmonyTargetMethod]
-        private static MethodBase Target() => ILPatch.FindMethodBySignature(Patterns.PatchOptionsMenu_Target);
+        private static MethodBase Target() => TargetMethodBySignature(Patterns.PatchOptionsMenu_Target);
 
         [HarmonyPostfix]
         private static void Postfix(object __instance)
