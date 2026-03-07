@@ -1,13 +1,16 @@
-﻿using _patcher.Constants;
+using System;
+using System.Reflection;
+using _patcher.Constants;
 using _patcher.Graphics.Skinning;
 using _patcher.Graphics.Sprites;
 using _patcher.Helpers;
 using _patcher.Wrappers;
-using System;
-using System.Reflection;
 
 namespace _patcher.Graphics
 {
+    /// <summary>
+    /// pSprite class.
+    /// </summary>
     internal class pSprite : pDrawable
     {
         private static readonly ConstructorInfo BaseSprite = ILPatch.FindConstructorBySignature(Patterns.Sprite_Constructor);

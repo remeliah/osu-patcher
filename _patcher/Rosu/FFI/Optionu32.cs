@@ -1,8 +1,11 @@
-﻿using System;
+using System;
 using System.Runtime.InteropServices;
 
 namespace _patcher.Rosu.FFI
 {
+    /// <summary>
+    /// Optionu32 struct.
+    /// </summary>
     [Serializable]
     [StructLayout(LayoutKind.Sequential)]
     public partial struct Optionu32
@@ -12,6 +15,9 @@ namespace _patcher.Rosu.FFI
         ///Byte where `1` means element `t` is valid.
         byte is_some;
     }
+    /// <summary>
+    /// Optionu32 struct.
+    /// </summary>
 
     public partial struct Optionu32
     {

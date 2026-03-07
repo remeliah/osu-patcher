@@ -1,14 +1,17 @@
-﻿using _patcher.Constants;
+using System;
+using System.Linq;
+using System.Reflection;
+using _patcher.Constants;
 using _patcher.Graphics.Skinning;
 using _patcher.Graphics.Sprites;
 using _patcher.Helpers;
 using _patcher.Wrappers;
-using System;
-using System.Linq;
-using System.Reflection;
 
 namespace _patcher.Graphics
 {
+    /// <summary>
+    /// pSpriteText class.
+    /// </summary>
     internal class pSpriteText : pText
     {
         private static readonly ConstructorInfo BaseSpriteText = ILPatch.FindConstructorBySignature(Patterns.SpriteText_Constructor);

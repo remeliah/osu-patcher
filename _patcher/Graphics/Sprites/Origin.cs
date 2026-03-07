@@ -1,5 +1,8 @@
-﻿namespace _patcher.Graphics.Sprites
+namespace _patcher.Graphics.Sprites
 {
+    /// <summary>
+    /// Origins enum.
+    /// </summary>
     internal enum Origins
     {
         TopLeft,

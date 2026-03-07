@@ -1,22 +1,25 @@
-﻿using _patcher.Constants;
-using _patcher.Helpers;
-using _patcher.Graphics;
-using _patcher.Graphics.Sprites;
-using _patcher.Graphics.Skinning;
-using _patcher.Resolver;
-using _patcher.Wrappers;
-using _patcher.Play;
-using HarmonyLib;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Reflection;
 using System.Reflection.Emit;
 using System.Runtime.CompilerServices;
-using System.IO;
+using HarmonyLib;
+using _patcher.Constants;
+using _patcher.Graphics;
+using _patcher.Graphics.Skinning;
+using _patcher.Graphics.Sprites;
+using _patcher.Helpers;
+using _patcher.Play;
+using _patcher.Resolver;
+using _patcher.Wrappers;
 
 namespace _patcher.Patches
 {
+    /// <summary>
+    /// PlayerOnLoadCompletePatch class.
+    /// </summary>
     [HarmonyPatch]
     internal class PlayerOnLoadCompletePatch
     {

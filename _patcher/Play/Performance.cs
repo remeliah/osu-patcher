@@ -1,10 +1,13 @@
-﻿using _patcher.Rosu;
-using _patcher.Graphics;
 using System;
 using System.Reflection;
+using _patcher.Graphics;
+using _patcher.Rosu;
 
 namespace _patcher.Play
 {
+    /// <summary>
+    /// Performance class.
+    /// </summary>
     internal class Performance
     {
         private readonly Calculator _ppCalculator;

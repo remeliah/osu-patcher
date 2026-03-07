@@ -1,8 +1,11 @@
-﻿using _patcher.Helpers;
 using System;
+using _patcher.Helpers;
 
 namespace _patcher.Wrappers
 {
+    /// <summary>
+    /// Color struct.
+    /// </summary>
     public struct Color : IEquatable<Color>
     {
         public byte R;

@@ -1,8 +1,11 @@
-﻿using System.Linq;
+using System.Linq;
 using System.Reflection;
 
 namespace _patcher.Resolver
 {
+    /// <summary>
+    /// Score class.
+    /// </summary>
     internal static class Score
     {
         private static FieldInfo _currentScoreField;

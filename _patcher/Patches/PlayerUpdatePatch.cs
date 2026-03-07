@@ -1,17 +1,20 @@
-﻿using _patcher.Constants;
-using _patcher.Helpers;
-using _patcher.Resolver;
-using _patcher.Utils;
-using HarmonyLib;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using System.Reflection.Emit;
 using System.Runtime.CompilerServices;
+using HarmonyLib;
+using _patcher.Constants;
+using _patcher.Helpers;
+using _patcher.Resolver;
+using _patcher.Utils;
 
 namespace _patcher.Patches
 {
+    /// <summary>
+    /// PlayerUpdatePatch class.
+    /// </summary>
     [HarmonyPatch]
     internal class PlayerUpdatePatch
     {

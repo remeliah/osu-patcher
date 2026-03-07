@@ -4,6 +4,9 @@ using _patcher.Wrappers;
 
 namespace _patcher.Utils
 {
+    /// <summary>
+    /// Logger class.
+    /// </summary>
     internal class Logger
     {
         public static void log(

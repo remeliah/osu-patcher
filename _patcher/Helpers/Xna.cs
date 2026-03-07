@@ -1,9 +1,11 @@
-﻿
 using System;
 using System.Reflection;
 
 namespace _patcher.Helpers
 {
+    /// <summary>
+    /// Xna class.
+    /// </summary>
     internal static class Xna
     {
         private static Type _vector2Type;

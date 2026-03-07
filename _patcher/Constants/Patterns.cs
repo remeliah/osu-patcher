@@ -2,6 +2,9 @@ using System.Reflection.Emit;
 
 namespace _patcher.Constants
 {
+    /// <summary>
+    /// Patterns class.
+    /// </summary>
     public static class Patterns
     {
         #region Options

@@ -1,5 +1,8 @@
-﻿namespace _patcher.Graphics.Sprites
+namespace _patcher.Graphics.Sprites
 {
+    /// <summary>
+    /// Clocks enum.
+    /// </summary>
     internal enum Clocks
     {
         /// <summary>
