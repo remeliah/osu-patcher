@@ -6,16 +6,16 @@ using HarmonyLib;
 using _patcher.Constants;
 using _patcher.Helpers;
 
-namespace _patcher.Patches
+namespace _patcher.Patches.Core
 {
     /// <summary>
     /// Patches the LocalisationManager to modify string retrieval.
     /// </summary>
     [HarmonyPatch]
-    public class LocalisationManager
+    public class LocalisationManager : BasePatch
     {
         [HarmonyTargetMethod]
-        private static MethodBase Target() => ILPatch.FindMethodBySignature(Patterns.LocalisationManager_Target);
+        private static MethodBase Target() => TargetMethodBySignature(Patterns.LocalisationManager_Target);
 
         [HarmonyTranspiler]
         private static IEnumerable<CodeInstruction> Transpiler(IEnumerable<CodeInstruction> instructions, ILGenerator il)

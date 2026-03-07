@@ -1,7 +1,7 @@
 using System.Threading;
 using _patcher.Play;
 
-namespace _patcher.Patches
+namespace _patcher.Patches.Player
 {
     /// <summary>
     /// PerformanceCalculationPatch class.

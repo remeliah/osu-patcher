@@ -15,16 +15,16 @@ using _patcher.Play;
 using _patcher.Resolver;
 using _patcher.Wrappers;
 
-namespace _patcher.Patches
+namespace _patcher.Patches.Player
 {
     /// <summary>
     /// PlayerOnLoadCompletePatch class.
     /// </summary>
     [HarmonyPatch]
-    internal class PlayerOnLoadCompletePatch
+    internal class PlayerOnLoadCompletePatch : BasePatch
     {
         [HarmonyTargetMethod]
-        private static MethodBase Target() => ILPatch.FindMethodBySignature(Patterns.PlayerOnLoadComplete_Target);
+        private static MethodBase Target() => TargetMethodBySignature(Patterns.PlayerOnLoadComplete_Target);
 
         [HarmonyTranspiler]
         private static IEnumerable<CodeInstruction> Transpiler(IEnumerable<CodeInstruction> instructions)
