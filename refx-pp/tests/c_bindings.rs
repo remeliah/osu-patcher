@@ -5,12 +5,12 @@ use interoptopus_backend_c::{Generator, Config};
 fn bindings_c() -> Result<(), Error> {
     Generator::new(
         Config {
-            ifndef: "rosu_ffi".to_string(),
+            ifndef: "refx_ffi".to_string(),
             ..Config::default()
         },
-        rosu_pp::my_inventory(),
+        refx_ffi::my_inventory(),
     )
-    .write_file("bindings/rosu_ffi.h")?;
+    .write_file("bindings/refx_ffi.h")?;
 
     Ok(())
 }

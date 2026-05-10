@@ -1,0 +1,42 @@
+{
+  "$schema": "https://schema.tauri.app/config/2",
+  "productName": "osu! patcher",
+  "version": "0.1.0",
+  "identifier": "dev.osupatcher.desktop",
+  "build": {
+    "beforeDevCommand": "npm.cmd run dev",
+    "devUrl": "http://127.0.0.1:1420",
+    "beforeBuildCommand": "npm.cmd run build",
+    "frontendDist": "../dist"
+  },
+  "app": {
+    "windows": [
+      {
+        "title": "osu! patcher",
+        "width": 430,
+        "height": 640,
+        "minWidth": 380,
+        "minHeight": 640
+      }
+    ],
+    "security": {
+      "csp": null
+    }
+  },
+  "bundle": {
+    "active": true,
+    "targets": ["nsis"],
+    "icon": ["icons/icon.ico"],
+    "resources": {
+      "../../patcher-cli/patchershit/bin/Release/patcher-cli.exe": "patcher-cli.exe",
+      "../../_patcher/bin/Release/_patcher.dll": "_patcher.dll",
+      "../../_patcher/bin/Release/0Harmony.dll": "0Harmony.dll",
+      "../../refx-pp/target/i686-pc-windows-msvc/release/refx_ffi.dll": "refx_ffi.dll"
+    },
+    "windows": {
+      "nsis": {
+        "displayLanguageSelector": false
+      }
+    }
+  }
+}

@@ -12,7 +12,7 @@ namespace My.Company
 {
     public static partial class Interop
     {
-        public const string NativeLib = "rosu_ffi";
+        public const string NativeLib = "refx_ffi";
 
         static Interop()
         {
@@ -20,10 +20,10 @@ namespace My.Company
 
 
         [DllImport(NativeLib, CallingConvention = CallingConvention.Cdecl, EntryPoint = "calculate_akatsuki_from_bytes")]
-        public static extern CalculatePerformanceResult calculate_akatsuki_from_bytes(Sliceu8 beatmap_bytes, uint mode, uint mods, uint max_combo, Optionf64 accuracy, Optionu32 count_300, Optionu32 count_100, Optionu32 count_50, uint miss_count, Optionu32 passed_objects);
+        public static extern CalculatePerformanceResult calculate_akatsuki_from_bytes(Sliceu8 beatmap_bytes, uint mode, uint mods, uint max_combo, float accuracy, uint miss_count, Optionu32 passed_objects);
 
-        [DllImport(NativeLib, CallingConvention = CallingConvention.Cdecl, EntryPoint = "calculate_realistik_from_bytes")]
-        public static extern CalculatePerformanceResult calculate_realistik_from_bytes(Sliceu8 beatmap_bytes, uint mode, uint mods, uint max_combo, Optionf64 accuracy, Optionu32 count_300, Optionu32 count_100, Optionu32 count_50, uint miss_count, Optionu32 passed_objects);
+        [DllImport(NativeLib, CallingConvention = CallingConvention.Cdecl, EntryPoint = "calculate_refx_from_bytes")]
+        public static extern CalculatePerformanceResult calculate_refx_from_bytes(Sliceu8 beatmap_bytes, uint mode, uint mods, uint max_combo, float accuracy, uint miss_count, long legacy_score, Optionu32 passed_objects);
 
     }
 
@@ -90,38 +90,6 @@ namespace My.Company
         IEnumerator IEnumerable.GetEnumerator()
         {
             return this.GetEnumerator();
-        }
-    }
-
-
-    ///Option type containing boolean flag and maybe valid data.
-    [Serializable]
-    [StructLayout(LayoutKind.Sequential)]
-    public partial struct Optionf64
-    {
-        ///Element that is maybe valid.
-        double t;
-        ///Byte where `1` means element `t` is valid.
-        byte is_some;
-    }
-
-    public partial struct Optionf64
-    {
-        public static Optionf64 FromNullable(double? nullable)
-        {
-            var result = new Optionf64();
-            if (nullable.HasValue)
-            {
-                result.is_some = 1;
-                result.t = nullable.Value;
-            }
-
-            return result;
-        }
-
-        public double? ToNullable()
-        {
-            return this.is_some == 1 ? this.t : (double?)null;
         }
     }
 

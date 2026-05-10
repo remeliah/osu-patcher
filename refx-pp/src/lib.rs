@@ -1,13 +1,12 @@
-use akatsuki_pp_1_0_1::{
+use akatsuki_pp_1_0_1::{ // bancho.py server usually uses this version
     osu_2019::{stars::OsuPerformanceAttributes as AkatsukiOsuPerfAttrs, OsuPP as AkatsukiOsuPP},
     AnyPP as AkatsukiAnyPP, Beatmap as AkatsukiBeatmap, GameMode as AkatsukiGameMode,
     PerformanceAttributes as AkatsukiPerfAttrs,
 };
-use realistik_pp::{
-    any::PerformanceAttributes as RealistikPerfAttrs,
-    model::mode::GameMode as RealistikGameMode,
-    osu_2019::{stars::OsuPerformanceAttributes as RealistikOsuPerfAttrs, OsuPP as RealistikOsuPP},
-    Beatmap as RealistikBeatmap,
+use refx_pp::{
+    any::PerformanceAttributes as RefxPerfAttrs,
+    model::mode::GameMode as RefxGameMode,
+    Beatmap as RefxBeatmap,
 };
 use interoptopus::{
     extra_type, ffi_function, ffi_type, function,
@@ -45,15 +44,9 @@ impl IntoResult for AkatsukiOsuPerfAttrs {
     }
 }
 
-impl IntoResult for RealistikPerfAttrs {
+impl IntoResult for RefxPerfAttrs {
     fn into_result(self) -> CalculatePerformanceResult {
         CalculatePerformanceResult { pp: self.pp(), stars: self.stars() }
-    }
-}
-
-impl IntoResult for RealistikOsuPerfAttrs {
-    fn into_result(self) -> CalculatePerformanceResult {
-        CalculatePerformanceResult { pp: self.pp, stars: self.difficulty.stars }
     }
 }
 
@@ -103,52 +96,40 @@ fn calculate_akatsuki_performance(
     }
 }
 
-fn calculate_realistik_performance(
-    beatmap: &RealistikBeatmap,
+fn calculate_refx_performance(
+    beatmap: &RefxBeatmap,
     mode: u32,
     mods: u32,
     max_combo: u32,
     accuracy: f32,
     miss_count: u32,
+    legacy_score: i64,
     passed_objects: Option<u32>,
 ) -> CalculatePerformanceResult {
-    if mode == 0 && (mods & 128) != 0 {
-        let mut calc = RealistikOsuPP::from_map(beatmap)
-            .mods(mods)
-            .combo(max_combo)
-            .misses(miss_count)
-            .accuracy(accuracy);
+    let game_mode = match mode {
+        0 => RefxGameMode::Osu,
+        1 => RefxGameMode::Taiko,
+        2 => RefxGameMode::Catch,
+        3 => RefxGameMode::Mania,
+        _ => panic!("Invalid mode: {}", mode),
+    };
 
-        if let Some(passed) = passed_objects {
-            calc = calc.passed_objects(passed);
-        }
+    let mut calc = beatmap
+        .performance()
+        .try_mode(game_mode)
+        .unwrap()
+        .mods(mods)
+        .lazer(false)
+        .combo(max_combo)
+        .misses(miss_count)
+        .legacy_total_score(legacy_score)
+        .accuracy(accuracy as f64);
 
-        calc.calculate().into_result()
-    } else {
-        let game_mode = match mode {
-            0 => RealistikGameMode::Osu,
-            1 => RealistikGameMode::Taiko,
-            2 => RealistikGameMode::Catch,
-            3 => RealistikGameMode::Mania,
-            _ => panic!("Invalid mode: {}", mode),
-        };
-
-        let mut calc = beatmap
-            .performance()
-            .try_mode(game_mode)
-            .unwrap()
-            .mods(mods)
-            .lazer(false)
-            .combo(max_combo)
-            .misses(miss_count)
-            .accuracy(accuracy as f64);
-
-        if let Some(passed) = passed_objects {
-            calc = calc.passed_objects(passed);
-        }
-
-        calc.calculate().into_result()
+    if let Some(passed) = passed_objects {
+        calc = calc.passed_objects(passed);
     }
+
+    calc.calculate().into_result()
 }
 
 #[ffi_function]
@@ -177,24 +158,26 @@ pub unsafe extern "C" fn calculate_akatsuki_from_bytes(
 
 #[ffi_function]
 #[no_mangle]
-pub unsafe extern "C" fn calculate_realistik_from_bytes(
+pub unsafe extern "C" fn calculate_refx_from_bytes(
     beatmap_bytes: FFISlice<u8>,
     mode: u32,
     mods: u32,
     max_combo: u32,
     accuracy: f32,
     miss_count: u32,
+    legacy_score: i64,
     passed_objects: FFIOption<u32>,
 ) -> CalculatePerformanceResult {
-    let beatmap = RealistikBeatmap::from_bytes(beatmap_bytes.as_slice()).unwrap();
+    let beatmap = RefxBeatmap::from_bytes(beatmap_bytes.as_slice()).unwrap();
 
-    calculate_realistik_performance(
+    calculate_refx_performance(
         &beatmap,
         mode,
         mods,
         max_combo,
         accuracy,
         miss_count,
+        legacy_score,
         passed_objects.into_option(),
     )
 }
@@ -203,6 +186,6 @@ pub fn my_inventory() -> Inventory {
     InventoryBuilder::new()
         .register(extra_type!(CalculatePerformanceResult))
         .register(function!(calculate_akatsuki_from_bytes))
-        .register(function!(calculate_realistik_from_bytes))
+        .register(function!(calculate_refx_from_bytes))
         .inventory()
 }

@@ -1,4 +1,4 @@
-﻿using _patcher.Rosu.FFI;
+using _patcher.Rosu.FFI;
 using System;
 using System.IO;
 using System.Linq;
@@ -9,7 +9,7 @@ namespace _patcher.Rosu
 {
     public sealed class Calculator
     {
-        [DllImport("rosu-pp", CallingConvention = CallingConvention.Cdecl)]
+        [DllImport("refx_ffi", CallingConvention = CallingConvention.Cdecl)]
         private static extern CalculateResult calculate_akatsuki_from_bytes(
             Sliceu8 beatmap_bytes,
             uint mode,
@@ -17,6 +17,17 @@ namespace _patcher.Rosu
             uint max_combo,
             float accuracy,
             uint miss_count,
+            Optionu32 passed_objects);
+
+        [DllImport("refx_ffi", CallingConvention = CallingConvention.Cdecl)]
+        private static extern CalculateResult calculate_refx_from_bytes(
+            Sliceu8 beatmap_bytes,
+            uint mode,
+            uint mods,
+            uint max_combo,
+            float accuracy,
+            uint miss_count,
+            long legacy_score,
             Optionu32 passed_objects);
 
         private static MethodInfo _getBeatmapStream;
@@ -38,9 +49,13 @@ namespace _patcher.Rosu
 
         private void InitializeBeatmapData()
         {
+            if (_beatmap == null || _getBeatmapStream == null)
+                return;
+
             using (Stream stream = (Stream)_getBeatmapStream.Invoke(_beatmap, null))
             {
-                if (stream == null) return;
+                if (stream == null)
+                    return;
 
                 if (stream.CanSeek)
                 {
@@ -64,7 +79,7 @@ namespace _patcher.Rosu
             }
         }
 
-        public double CalculateScore(object score, float accuracy, int totalHits, int maxCombo, int playMode)
+        public double CalculateScore(object score, float accuracy, int legacyScore, int maxCombo, int playMode)
         {
             if (_disposed)
                 throw new ObjectDisposedException("Calculator");
@@ -75,20 +90,39 @@ namespace _patcher.Rosu
             var ushortFields = score.GetType().GetFields(BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic)
                 .Where(f => f.FieldType == typeof(ushort)).ToArray();
 
+            if (ushortFields.Length <= 5)
+                return 0.0;
+
+            ushort count300 = (ushort)ushortFields[0].GetValue(score);
+            ushort count100 = (ushort)ushortFields[1].GetValue(score);
+            ushort count50 = (ushort)ushortFields[2].GetValue(score);
             ushort countMiss = (ushort)ushortFields[5].GetValue(score);
+            uint passedObjectCount = (uint)(count300 + count100 + count50 + countMiss);
 
-            Optionu32 passedObjects = Optionu32.FromNullable(new uint?((uint)totalHits));
+            Optionu32 passedObjects = Optionu32.FromNullable(new uint?(passedObjectCount));
+            uint mods = (uint)Convert.ToInt32(_mods);
 
-            CalculateResult result = calculate_akatsuki_from_bytes(
+            if (Main.IsRefx)
+            {
+                return calculate_refx_from_bytes(
+                    _beatmapSlice,
+                    (uint)playMode,
+                    mods,
+                    (uint)maxCombo,
+                    accuracy,
+                    (uint)Convert.ToInt32(countMiss),
+                    legacyScore,
+                    passedObjects).pp;
+            }
+
+            return calculate_akatsuki_from_bytes(
                 _beatmapSlice,
                 (uint)playMode,
-                (uint)Convert.ToInt32(_mods),
+                mods,
                 (uint)maxCombo,
                 accuracy,
                 (uint)Convert.ToInt32(countMiss),
-                passedObjects);
-
-            return result.pp;
+                passedObjects).pp;
         }
 
         public void Dispose()

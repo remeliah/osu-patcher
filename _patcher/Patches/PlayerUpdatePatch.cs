@@ -1,9 +1,7 @@
-﻿using _patcher.Constants;
+using _patcher.Constants;
 using _patcher.Helpers;
 using _patcher.Resolver;
-using _patcher.Utils;
 using HarmonyLib;
-using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
@@ -17,10 +15,9 @@ namespace _patcher.Patches
     {
         private static FieldInfo _currentScore;
         private static MethodInfo _getAccuracy;
-        private static MethodInfo _getTotalHits;
+        private static MethodInfo _getLegacyScore;
         private static FieldInfo _maxCombo;
         private static FieldInfo _playMode;
-
 
         [HarmonyTargetMethod]
         private static MethodBase Target()
@@ -53,7 +50,7 @@ namespace _patcher.Patches
                 .GetMethod(nameof(OnUpdate), BindingFlags.Public | BindingFlags.Static)
             ));
 
-            return codes;
+            return codes.AsEnumerable();
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -83,15 +80,14 @@ namespace _patcher.Patches
             if (_getAccuracy == null)
                 return;
 
-            // todo: is total hits really needed? maybe we can just calculate it from count300 + count100 + count50 + countMiss
-            if (_getTotalHits == null)
-                _getTotalHits = scoreType.GetMethods(BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic)
+            if (_getLegacyScore == null)
+                _getLegacyScore = scoreType.GetMethods(BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic)
                     .FirstOrDefault(m =>
                         m.ReturnType == typeof(int) &&
                         m.GetParameters().Length == 0 &&
                         m.IsVirtual);
-            
-            if (_getTotalHits == null)
+
+            if (_getLegacyScore == null)
                 return;
 
             if (_maxCombo == null)
@@ -107,11 +103,11 @@ namespace _patcher.Patches
                 return;
 
             float accuracy = (float)_getAccuracy.Invoke(score, null) * 100f;
-            int totalHits = (int)_getTotalHits.Invoke(score, null);
+            int legacyScore = (int)_getLegacyScore.Invoke(score, null);
             int maxCombo = (int)_maxCombo.GetValue(score);
             int playMode = (int)_playMode.GetValue(score);
 
-            PerformanceCalculationPatch.QueueCalculation(score, accuracy, totalHits, maxCombo, playMode);
+            PerformanceCalculationPatch.QueueCalculation(score, accuracy, legacyScore, maxCombo, playMode);
         }
 
         private static void EnsureScoreFieldResolved(object playerInstance)

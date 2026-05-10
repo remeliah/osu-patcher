@@ -7,9 +7,9 @@ fn bindings_py() -> Result<(), Error> {
         Config {
             ..Config::default()
         },
-        rosu_pp::my_inventory(),
+        refx_ffi::my_inventory(),
     )
-    .write_file("bindings/rosu_ffi.py")?;
+    .write_file("bindings/refx_ffi.py")?;
 
     Ok(())
 }

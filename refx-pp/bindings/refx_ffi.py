@@ -10,25 +10,25 @@ def init_lib(path):
     global c_lib
     c_lib = ctypes.cdll.LoadLibrary(path)
 
-    c_lib.calculate_akatsuki_from_bytes.argtypes = [Sliceu8, ctypes.c_uint32, ctypes.c_uint32, ctypes.c_uint32, Optionf64, Optionu32, Optionu32, Optionu32, ctypes.c_uint32, Optionu32]
-    c_lib.calculate_realistik_from_bytes.argtypes = [Sliceu8, ctypes.c_uint32, ctypes.c_uint32, ctypes.c_uint32, Optionf64, Optionu32, Optionu32, Optionu32, ctypes.c_uint32, Optionu32]
+    c_lib.calculate_akatsuki_from_bytes.argtypes = [Sliceu8, ctypes.c_uint32, ctypes.c_uint32, ctypes.c_uint32, ctypes.c_float, ctypes.c_uint32, Optionu32]
+    c_lib.calculate_refx_from_bytes.argtypes = [Sliceu8, ctypes.c_uint32, ctypes.c_uint32, ctypes.c_uint32, ctypes.c_float, ctypes.c_uint32, ctypes.c_int64, Optionu32]
 
     c_lib.calculate_akatsuki_from_bytes.restype = CalculatePerformanceResult
-    c_lib.calculate_realistik_from_bytes.restype = CalculatePerformanceResult
+    c_lib.calculate_refx_from_bytes.restype = CalculatePerformanceResult
 
 
 
-def calculate_akatsuki_from_bytes(beatmap_bytes: Sliceu8 | ctypes.Array[ctypes.c_uint8], mode: int, mods: int, max_combo: int, accuracy: Optionf64, count_300: Optionu32, count_100: Optionu32, count_50: Optionu32, miss_count: int, passed_objects: Optionu32) -> CalculatePerformanceResult:
+def calculate_akatsuki_from_bytes(beatmap_bytes: Sliceu8 | ctypes.Array[ctypes.c_uint8], mode: int, mods: int, max_combo: int, accuracy: float, miss_count: int, passed_objects: Optionu32) -> CalculatePerformanceResult:
     if hasattr(beatmap_bytes, "_length_") and getattr(beatmap_bytes, "_type_", "") == ctypes.c_uint8:
         beatmap_bytes = Sliceu8(data=ctypes.cast(beatmap_bytes, ctypes.POINTER(ctypes.c_uint8)), len=len(beatmap_bytes))
 
-    return c_lib.calculate_akatsuki_from_bytes(beatmap_bytes, mode, mods, max_combo, accuracy, count_300, count_100, count_50, miss_count, passed_objects)
+    return c_lib.calculate_akatsuki_from_bytes(beatmap_bytes, mode, mods, max_combo, accuracy, miss_count, passed_objects)
 
-def calculate_realistik_from_bytes(beatmap_bytes: Sliceu8 | ctypes.Array[ctypes.c_uint8], mode: int, mods: int, max_combo: int, accuracy: Optionf64, count_300: Optionu32, count_100: Optionu32, count_50: Optionu32, miss_count: int, passed_objects: Optionu32) -> CalculatePerformanceResult:
+def calculate_refx_from_bytes(beatmap_bytes: Sliceu8 | ctypes.Array[ctypes.c_uint8], mode: int, mods: int, max_combo: int, accuracy: float, miss_count: int, legacy_score: int, passed_objects: Optionu32) -> CalculatePerformanceResult:
     if hasattr(beatmap_bytes, "_length_") and getattr(beatmap_bytes, "_type_", "") == ctypes.c_uint8:
         beatmap_bytes = Sliceu8(data=ctypes.cast(beatmap_bytes, ctypes.POINTER(ctypes.c_uint8)), len=len(beatmap_bytes))
 
-    return c_lib.calculate_realistik_from_bytes(beatmap_bytes, mode, mods, max_combo, accuracy, count_300, count_100, count_50, miss_count, passed_objects)
+    return c_lib.calculate_refx_from_bytes(beatmap_bytes, mode, mods, max_combo, accuracy, miss_count, legacy_score, passed_objects)
 
 
 
@@ -100,31 +100,6 @@ class CalculatePerformanceResult(ctypes.Structure):
     @stars.setter
     def stars(self, value: float):
         return ctypes.Structure.__set__(self, "stars", value)
-
-
-class Optionf64(ctypes.Structure):
-    """May optionally hold a value."""
-
-    _fields_ = [
-        ("_t", ctypes.c_double),
-        ("_is_some", ctypes.c_uint8),
-    ]
-
-    @property
-    def value(self) -> ctypes.c_double:
-        """Returns the value if it exists, or None."""
-        if self._is_some == 1:
-            return self._t
-        else:
-            return None
-
-    def is_some(self) -> bool:
-        """Returns true if the value exists."""
-        return self._is_some == 1
-
-    def is_none(self) -> bool:
-        """Returns true if the value does not exist."""
-        return self._is_some != 0
 
 
 class Optionu32(ctypes.Structure):

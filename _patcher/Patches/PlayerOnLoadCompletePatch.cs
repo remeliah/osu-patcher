@@ -59,17 +59,25 @@ namespace _patcher.Patches
                                     .Any(m => m.ReturnType == typeof(Stream) && m.GetParameters().Length == 0));
 
             var currentScoreField = Score.GetCurrentScoreField(playerInstance);
-            if (currentScoreField == null || beatmapField == null) return;
+            if (currentScoreField == null || beatmapField == null)
+                return;
 
             var currentScore = currentScoreField.GetValue(null);
             var beatmap = beatmapField.GetValue(playerInstance);
 
-            if (currentScore == null || beatmap == null) return;
+            if (currentScore == null || beatmap == null)
+                return;
 
             var enabledModsField = currentScore.GetType().GetFields(BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic)
                .FirstOrDefault(f => f.FieldType.IsGenericType);
 
+            if (enabledModsField == null)
+                return;
+
             var enabledMods = enabledModsField.GetValue(currentScore);
+            if (enabledMods == null)
+                return;
+
             var obfuscatedType = enabledMods.GetType();
             var generic = obfuscatedType.GetGenericArguments()[0];
 
@@ -89,6 +97,9 @@ namespace _patcher.Patches
                 .Where(m => m.ReturnType == typeof(Stream) && m.GetParameters().Length == 0)
                 .Skip(1) // first one is for audio.
                 .FirstOrDefault();
+
+            if (getBeatmapStreamMethod == null)
+                return;
 
             var performance = new Performance(beatmap, getBeatmapStreamMethod, (uint)mods, new[] { ppText });
             PerformanceCalculationPatch.SetPerformance(performance);

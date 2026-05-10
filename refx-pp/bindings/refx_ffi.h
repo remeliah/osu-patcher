@@ -20,15 +20,6 @@ typedef struct calculateperformanceresult
     } calculateperformanceresult;
 
 ///Option type containing boolean flag and maybe valid data.
-typedef struct optionf64
-    {
-    ///Element that is maybe valid.
-    double t;
-    ///Byte where `1` means element `t` is valid.
-    uint8_t is_some;
-    } optionf64;
-
-///Option type containing boolean flag and maybe valid data.
 typedef struct optionu32
     {
     ///Element that is maybe valid.
@@ -47,9 +38,9 @@ typedef struct sliceu8
     } sliceu8;
 
 
-calculateperformanceresult calculate_akatsuki_from_bytes(sliceu8 beatmap_bytes, uint32_t mode, uint32_t mods, uint32_t max_combo, optionf64 accuracy, optionu32 count_300, optionu32 count_100, optionu32 count_50, uint32_t miss_count, optionu32 passed_objects);
+calculateperformanceresult calculate_akatsuki_from_bytes(sliceu8 beatmap_bytes, uint32_t mode, uint32_t mods, uint32_t max_combo, float accuracy, uint32_t miss_count, optionu32 passed_objects);
 
-calculateperformanceresult calculate_realistik_from_bytes(sliceu8 beatmap_bytes, uint32_t mode, uint32_t mods, uint32_t max_combo, optionf64 accuracy, optionu32 count_300, optionu32 count_100, optionu32 count_50, uint32_t miss_count, optionu32 passed_objects);
+calculateperformanceresult calculate_refx_from_bytes(sliceu8 beatmap_bytes, uint32_t mode, uint32_t mods, uint32_t max_combo, float accuracy, uint32_t miss_count, int64_t legacy_score, optionu32 passed_objects);
 
 
 #ifdef __cplusplus

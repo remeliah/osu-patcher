@@ -1,5 +1,5 @@
-﻿using _patcher.Rosu;
 using _patcher.Graphics;
+using _patcher.Rosu;
 using System;
 using System.Reflection;
 
@@ -11,7 +11,7 @@ namespace _patcher.Play
         private readonly pSpriteText[] _ppSpriteTexts;
         private int currentPP;
         private int previousPP;
-        private int lastCombo;
+        private int lastLegacyScore;
 
         public Performance(object beatmap, MethodInfo beatmapStream, uint mods, pSpriteText[] spriteTexts)
             : this(beatmap, beatmapStream, mods)
@@ -24,12 +24,17 @@ namespace _patcher.Play
             _ppCalculator = new Calculator(beatmap, beatmapStream, mods);
         }
 
-        public void UpdatePerformance(object score, float accuracy, int totalHits, int maxCombo, int playMode)
+        public void UpdatePerformance(object score, float accuracy, int legacyScore, int maxCombo, int playMode)
         {
-            if (lastCombo != totalHits)
+            if (lastLegacyScore != legacyScore)
             {
-                currentPP = (int)Math.Round(_ppCalculator.CalculateScore(score, accuracy, totalHits, maxCombo, playMode));
-                lastCombo = totalHits;
+                double pp = _ppCalculator.CalculateScore(score, accuracy, legacyScore, maxCombo, playMode);
+
+                if (double.IsNaN(pp) || double.IsInfinity(pp) || pp < 0.0)
+                    pp = 0.0;
+
+                currentPP = (int)Math.Round(pp);
+                lastLegacyScore = legacyScore;
             }
 
             if (previousPP != currentPP && _ppSpriteTexts != null)

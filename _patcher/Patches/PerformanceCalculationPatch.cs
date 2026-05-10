@@ -1,4 +1,4 @@
-﻿using _patcher.Play;
+using _patcher.Play;
 using System.Threading;
 
 namespace _patcher.Patches
@@ -13,7 +13,7 @@ namespace _patcher.Patches
             _performance = performance;
         }
 
-        public static void QueueCalculation(object score, float accuracy, int totalHits, int maxCombo, int playMode)
+        public static void QueueCalculation(object score, float accuracy, int legacyScore, int maxCombo, int playMode)
         {
             if (_performance == null)
                 return;
@@ -24,7 +24,7 @@ namespace _patcher.Patches
                 {
                     try
                     {
-                        _performance.UpdatePerformance(score, accuracy, totalHits, maxCombo, playMode);
+                        _performance.UpdatePerformance(score, accuracy, legacyScore, maxCombo, playMode);
                     }
                     finally
                     {
