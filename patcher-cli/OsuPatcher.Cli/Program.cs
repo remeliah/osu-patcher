@@ -16,9 +16,7 @@ namespace OsuPatcher.Cli
         private const string DefaultServer = "refx.online";
         private const string PatcherUrl = "https://updater.refx.online/patcher";
         private const string RuntimeDllName = "OsuPatcher.Runtime.dll";
-        private const string LegacyRuntimeDllName = "_patcher.dll";
         private const string RuntimeEntryType = "OsuPatcher.Runtime.Main";
-        private const string LegacyRuntimeEntryType = "_patcher.Main";
         private static string ConfigPath;
         
         public static void Main(string[] args)
@@ -98,22 +96,15 @@ namespace OsuPatcher.Cli
             if (!File.Exists(harmonyPath) || !HashMatches(harmonyPath, (string)((JObject)data["0Harmony.dll"])["hash_md5"]))
                 harmonyPath = DownloadPatcher(data, "0Harmony.dll", artifactDirectory);
 
-            if (!File.Exists(patcherPath) || !HashMatches(patcherPath, (string)((JObject)data[LegacyRuntimeDllName])["hash_md5"]))
-                patcherPath = DownloadPatcher(data, LegacyRuntimeDllName, artifactDirectory, RuntimeDllName);
+            if (!File.Exists(patcherPath) || !HashMatches(patcherPath, (string)((JObject)data[RuntimeDllName])["hash_md5"]))
+                patcherPath = DownloadPatcher(data, RuntimeDllName, artifactDirectory);
 
             return patcherPath;
         }
 
         private static void InjectRuntime(InjectableProcess proc, string patcherPath)
         {
-            try
-            {
-                proc.Inject(patcherPath, RuntimeEntryType, "Initialize");
-            }
-            catch
-            {
-                proc.Inject(patcherPath, LegacyRuntimeEntryType, "Initialize");
-            }
+            proc.Inject(patcherPath, RuntimeEntryType, "Initialize");
         }
 
         private static string GetArtifactDirectory()

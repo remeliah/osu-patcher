@@ -14,7 +14,6 @@ const CONFIG_DIR_NAME: &str = "osuPatcher";
 const CONFIG_FILE_NAME: &str = "config.ini";
 const DEFAULT_SERVER: &str = "refx.online";
 const PATCHER_DLL: &str = "OsuPatcher.Runtime.dll";
-const LEGACY_PATCHER_DLL: &str = "_patcher.dll";
 const PATCHER_CLI_EXE: &str = "patcher-cli.exe";
 #[cfg(windows)]
 const CREATE_NO_WINDOW: u32 = 0x08000000;
@@ -404,13 +403,10 @@ fn find_patcher_cli(app: &tauri::AppHandle) -> Option<PathBuf> {
 fn resolve_patcher_artifact(app: &tauri::AppHandle) -> Option<PathBuf> {
     resource_path(app, PATCHER_DLL)
         .into_iter()
-        .chain(resource_path(app, LEGACY_PATCHER_DLL))
         .chain(repo_root().into_iter().flat_map(|root| {
             [
                 patcher_artifact_path(&root, "Release"),
                 patcher_artifact_path(&root, "Debug"),
-                legacy_patcher_artifact_path(&root, "Release"),
-                legacy_patcher_artifact_path(&root, "Debug"),
             ]
         }))
         .find(|path| path.exists())
@@ -476,9 +472,6 @@ fn harmony_source(app: &tauri::AppHandle) -> Option<PathBuf> {
             repo_root()
                 .map(|root| patcher_artifact_path(&root, "Release").with_file_name("0Harmony.dll")),
         )
-        .chain(repo_root().map(|root| {
-            legacy_patcher_artifact_path(&root, "Release").with_file_name("0Harmony.dll")
-        }))
         .find(|path| path.exists())
 }
 
@@ -494,7 +487,6 @@ fn is_osu_running() -> Result<bool, AppError> {
 
 fn artifact_path(app: &tauri::AppHandle) -> PathBuf {
     resource_path(app, PATCHER_DLL)
-        .or_else(|| resource_path(app, LEGACY_PATCHER_DLL))
         .or_else(|| {
             repo_root()
                 .map(|root| patcher_artifact_path(&root, "Release"))
@@ -519,13 +511,6 @@ fn patcher_artifact_path(root: &Path, configuration: &str) -> PathBuf {
         .join("bin")
         .join(configuration)
         .join(PATCHER_DLL)
-}
-
-fn legacy_patcher_artifact_path(root: &Path, configuration: &str) -> PathBuf {
-    root.join("_patcher")
-        .join("bin")
-        .join(configuration)
-        .join(LEGACY_PATCHER_DLL)
 }
 
 fn repo_root() -> Option<PathBuf> {
