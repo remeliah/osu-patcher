@@ -291,6 +291,7 @@ dist/
 .idea/
 .idea/*
 .tools/
+reference/
 
 # Visual Studio 6 build log
 *.plg

@@ -13,7 +13,9 @@ use thiserror::Error;
 const CONFIG_DIR_NAME: &str = "osuPatcher";
 const CONFIG_FILE_NAME: &str = "config.ini";
 const DEFAULT_SERVER: &str = "refx.online";
-const PATCHER_ARTIFACT: &str = "_patcher\\bin\\Release\\_patcher.dll";
+const PATCHER_DLL: &str = "OsuPatcher.Runtime.dll";
+const LEGACY_PATCHER_DLL: &str = "_patcher.dll";
+const PATCHER_CLI_EXE: &str = "patcher-cli.exe";
 #[cfg(windows)]
 const CREATE_NO_WINDOW: u32 = 0x08000000;
 #[cfg(windows)]
@@ -37,7 +39,7 @@ enum AppError {
     Launch { path: String, source: io::Error },
     #[error("patcher-cli.exe was not found; build patcher-cli in Release first")]
     CliNotFound,
-    #[error("_patcher.dll was not found; build the C# patcher in Release first")]
+    #[error("OsuPatcher.Runtime.dll was not found; build the C# runtime patcher in Release first")]
     PatcherNotFound,
     #[error("failed to copy {from} to {to}: {source}")]
     Copy {
@@ -257,15 +259,12 @@ fn inject_osu_inner(
 
     let cli_path = find_patcher_cli(app).ok_or(AppError::CliNotFound)?;
     let cli_dir = cli_path.parent().unwrap_or_else(|| Path::new("."));
-    let cli_config = cli_dir.join("conf.db");
-    fs::write(&cli_config, display_path(&osu_path)).map_err(|source| AppError::Write {
-        path: display_path(&cli_config),
-        source,
-    })?;
 
     let mut command = Command::new(&cli_path);
     command
         .current_dir(cli_dir)
+        .arg("--osu")
+        .arg(command_path(&osu_path))
         .arg("--patcher")
         .arg(command_path(&patcher_path))
         .stdin(Stdio::null())
@@ -383,26 +382,35 @@ fn normalize_server(server: Option<String>) -> String {
 }
 
 fn find_patcher_cli(app: &tauri::AppHandle) -> Option<PathBuf> {
-    resource_path(app, "patcher-cli.exe")
+    resource_path(app, PATCHER_CLI_EXE)
         .into_iter()
         .chain(repo_root().into_iter().flat_map(|root| {
             [
-                root.join("patcher-cli\\patchershit\\bin\\Release\\patcher-cli.exe"),
-                root.join("patcher-cli\\patchershit\\bin\\Debug\\patcher-cli.exe"),
-                root.join("patcher-cli\\patchershit\\bin\\Release\\patchershit.exe"),
-                root.join("patcher-cli\\patchershit\\bin\\Debug\\patchershit.exe"),
+                root.join("patcher-cli")
+                    .join("OsuPatcher.Cli")
+                    .join("bin")
+                    .join("Release")
+                    .join(PATCHER_CLI_EXE),
+                root.join("patcher-cli")
+                    .join("OsuPatcher.Cli")
+                    .join("bin")
+                    .join("Debug")
+                    .join(PATCHER_CLI_EXE),
             ]
         }))
         .find(|path| path.exists())
 }
 
 fn resolve_patcher_artifact(app: &tauri::AppHandle) -> Option<PathBuf> {
-    resource_path(app, "_patcher.dll")
+    resource_path(app, PATCHER_DLL)
         .into_iter()
+        .chain(resource_path(app, LEGACY_PATCHER_DLL))
         .chain(repo_root().into_iter().flat_map(|root| {
             [
-                root.join("_patcher\\bin\\Release\\_patcher.dll"),
-                root.join("_patcher\\bin\\Debug\\_patcher.dll"),
+                patcher_artifact_path(&root, "Release"),
+                patcher_artifact_path(&root, "Debug"),
+                legacy_patcher_artifact_path(&root, "Release"),
+                legacy_patcher_artifact_path(&root, "Debug"),
             ]
         }))
         .find(|path| path.exists())
@@ -444,22 +452,33 @@ fn prepare_patcher_dependencies(
 fn refx_ffi_source(app: &tauri::AppHandle) -> Option<PathBuf> {
     resource_path(app, "refx_ffi.dll")
         .into_iter()
-        .chain(
-            repo_root().map(|root| {
-                root.join("refx-pp\\target\\i686-pc-windows-msvc\\release\\refx_ffi.dll")
-            }),
-        )
+        .chain(repo_root().map(|root| {
+            root.join("refx-pp")
+                .join("target")
+                .join("i686-pc-windows-msvc")
+                .join("release")
+                .join("refx_ffi.dll")
+        }))
         .find(|path| path.exists())
 }
 
 fn harmony_source(app: &tauri::AppHandle) -> Option<PathBuf> {
     resource_path(app, "0Harmony.dll")
         .into_iter()
+        .chain(repo_root().map(|root| {
+            root.join("packages")
+                .join("Lib.Harmony.2.3.3")
+                .join("lib")
+                .join("net472")
+                .join("0Harmony.dll")
+        }))
         .chain(
             repo_root()
-                .map(|root| root.join("packages\\Lib.Harmony.2.3.3\\lib\\net472\\0Harmony.dll")),
+                .map(|root| patcher_artifact_path(&root, "Release").with_file_name("0Harmony.dll")),
         )
-        .chain(repo_root().map(|root| root.join("_patcher\\bin\\Release\\0Harmony.dll")))
+        .chain(repo_root().map(|root| {
+            legacy_patcher_artifact_path(&root, "Release").with_file_name("0Harmony.dll")
+        }))
         .find(|path| path.exists())
 }
 
@@ -474,13 +493,37 @@ fn is_osu_running() -> Result<bool, AppError> {
 }
 
 fn artifact_path(app: &tauri::AppHandle) -> PathBuf {
-    resource_path(app, "_patcher.dll")
+    resource_path(app, PATCHER_DLL)
+        .or_else(|| resource_path(app, LEGACY_PATCHER_DLL))
         .or_else(|| {
             repo_root()
-                .map(|root| root.join(PATCHER_ARTIFACT))
+                .map(|root| patcher_artifact_path(&root, "Release"))
                 .filter(|path| path.exists())
         })
-        .unwrap_or_else(|| PathBuf::from(PATCHER_ARTIFACT))
+        .unwrap_or_else(|| {
+            repo_root()
+                .map(|root| patcher_artifact_path(&root, "Release"))
+                .unwrap_or_else(|| {
+                    PathBuf::from("patcher")
+                        .join("bin")
+                        .join("Release")
+                        .join(PATCHER_DLL)
+                })
+        })
+}
+
+fn patcher_artifact_path(root: &Path, configuration: &str) -> PathBuf {
+    root.join("patcher")
+        .join("bin")
+        .join(configuration)
+        .join(PATCHER_DLL)
+}
+
+fn legacy_patcher_artifact_path(root: &Path, configuration: &str) -> PathBuf {
+    root.join("_patcher")
+        .join("bin")
+        .join(configuration)
+        .join(LEGACY_PATCHER_DLL)
 }
 
 fn repo_root() -> Option<PathBuf> {
