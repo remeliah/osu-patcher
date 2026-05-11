@@ -3,7 +3,7 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.11.35312.102
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OsuPatcher.Runtime", "patcher\OsuPatcher.Runtime.csproj", "{E5189888-C6F1-4874-B539-DA8112A97C94}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OsuPatcher.Runtime", "OsuPatcher.Runtime.csproj", "{E5189888-C6F1-4874-B539-DA8112A97C94}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
