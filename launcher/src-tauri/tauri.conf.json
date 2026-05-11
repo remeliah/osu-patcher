@@ -29,8 +29,8 @@
     "icon": ["icons/icon.ico"],
     "resources": {
       "../../patcher-cli/OsuPatcher.Cli/bin/Release/patcher-cli.exe": "patcher-cli.exe",
-      "../../patcher/bin/Release/OsuPatcher.Runtime.dll": "OsuPatcher.Runtime.dll",
-      "../../patcher/bin/Release/0Harmony.dll": "0Harmony.dll",
+      "../../patcher/OsuPatcher.Runtime/bin/Release/OsuPatcher.Runtime.dll": "OsuPatcher.Runtime.dll",
+      "../../patcher/OsuPatcher.Runtime/bin/Release/0Harmony.dll": "0Harmony.dll",
       "../../refx-pp/target/i686-pc-windows-msvc/release/refx_ffi.dll": "refx_ffi.dll"
     },
     "windows": {

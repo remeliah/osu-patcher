@@ -505,6 +505,7 @@ fn artifact_path(app: &tauri::AppHandle) -> PathBuf {
                 .map(|root| patcher_artifact_path(&root, "Release"))
                 .unwrap_or_else(|| {
                     PathBuf::from("patcher")
+                        .join("OsuPatcher.Runtime")
                         .join("bin")
                         .join("Release")
                         .join(PATCHER_DLL)
@@ -514,6 +515,7 @@ fn artifact_path(app: &tauri::AppHandle) -> PathBuf {
 
 fn patcher_artifact_path(root: &Path, configuration: &str) -> PathBuf {
     root.join("patcher")
+        .join("OsuPatcher.Runtime")
         .join("bin")
         .join(configuration)
         .join(PATCHER_DLL)
